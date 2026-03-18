@@ -1,0 +1,13 @@
+# robots.txt for nilxnjxn.com (Main Landing Page)
+User-agent: *
+Disallow: /admin/
+Disallow: /wp-admin/
+Disallow: /private/
+Disallow: /tmp/
+Disallow: /cgi-bin/
+
+# Allow all other content including images of your art
+Allow: /
+
+# Link to your main sitemap
+Sitemap: https://nilxnjxn.com
