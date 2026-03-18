@@ -26,7 +26,16 @@ const mrsSheppards = localFont({
   variable: "--font-mrs-sheppards",
 });
 
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL 
+  ? process.env.NEXT_PUBLIC_APP_URL
+  : process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}`
+      : 'http://localhost:3000';
+
 export const metadata: Metadata = {
+  metadataBase: new URL(baseUrl),
   title: "NILXNJXN — new music now",
   description: "Listen. Feel. Own — preview instantly, buy directly.",
   icons: {
