@@ -71,7 +71,7 @@ export function CursorFollower() {
         ref={ringRef}
         className={cn(
           "absolute top-0 left-0 -ml-8 -mt-8 rounded-full border border-accent/20 transition-all duration-300 ease-out flex items-center justify-center",
-          isHovering ? "w-16 h-16 bg-accent/5 border-accent/40 scale-125" : "w-16 h-16 bg-transparent"
+          isHovering ? "w-10 h-10 bg-accent/5 border-accent/40 scale-125" : "w-10 h-10 bg-transparent"
         )}
       >
         <span className={cn(
