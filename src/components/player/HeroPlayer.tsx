@@ -58,15 +58,22 @@ export function HeroPlayer({ track, onPlay, hasInteracted }: HeroPlayerProps) {
               key="identity-reveal"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, ease: "easeOut" }}
-              className="text-center space-y-4"
+              transition={{ duration: 1, delay: 0.2 }}
+              className="space-y-4"
             >
-              <h1 className="font-expressive text-7xl md:text-9xl text-white drop-shadow-2xl leading-none">
-                nilxnjxn
+              <h1 className="text-6xl md:text-9xl font-expressive text-white tracking-tighter mix-blend-difference drop-shadow-2xl">
+                NILXNJXN
               </h1>
-              <p className="font-functional text-lg md:text-xl text-accent/80 font-light tracking-wide italic">
-                {track.title}
-              </p>
+              <div className="overflow-hidden">
+                 <motion.p 
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                  className="text-white/60 font-functional text-xs uppercase tracking-[0.4em] font-light"
+                >
+                  {track.title}
+                </motion.p>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

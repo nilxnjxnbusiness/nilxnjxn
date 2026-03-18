@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Track } from "@/lib/data";
 import { HeroPlayer } from "@/components/player/HeroPlayer";
-import { WaveformPlayer } from "@/components/player/WaveformPlayer";
 import { TrackCard } from "@/components/player/TrackCard";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -107,9 +106,6 @@ export function HomeClient({ tracks }: HomeClientProps) {
                 </div>
               </div>
             </motion.section>
-
-            {/* Global Bottom Waveform Player */}
-            <WaveformPlayer />
 
             {/* Footer */}
             <footer className="w-full pb-32 pt-24 flex flex-col items-center justify-center text-muted-foreground text-xs gap-4 relative z-10 border-t border-white/5 bg-background">

@@ -1,70 +1,38 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
-import { Geist, Geist_Mono, Figtree, Inter } from "next/font/google";
 import "./globals.css";
-import { cn } from "@/lib/utils";
+import { Inter } from "next/font/google";
+import localFont from "next/font/local";
+import { WaveformPlayer } from "@/components/player/WaveformPlayer";
 
-const functional = Inter({ subsets: ["latin"], variable: "--font-functional" });
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const functional = Inter({
   subsets: ["latin"],
+  variable: "--font-functional",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const comforter = localFont({
-  src: "../../public/fonts/Comforter/Comforter-Regular.ttf",
-  variable: "--font-expressive-alt",
-});
-
-const mrsSheppards = localFont({
-  src: "../../public/fonts/Mrs_Sheppards/MrsSheppards-Regular.ttf",
+const expressive = localFont({
+  src: "./fonts/MrsSheppards-Regular.ttf",
   variable: "--font-expressive",
 });
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL 
-  ? process.env.NEXT_PUBLIC_APP_URL
-  : process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : process.env.VERCEL_URL 
-      ? `https://${process.env.VERCEL_URL}`
-      : 'http://localhost:3000';
+const expressiveAlt = localFont({
+  src: "./fonts/Comforter-Regular.ttf",
+  variable: "--font-expressive-alt",
+});
 
-export const metadata: Metadata = {
-  metadataBase: new URL(baseUrl),
-  title: "NILXNJXN — new music now",
-  description: "Listen. Feel. Own — preview instantly, buy directly.",
-  icons: {
-    icon: [
-      { url: '/favicons/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/favicons/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/favicons/favicon-96x96.png', sizes: '96x96', type: 'image/png' },
-      { url: '/favicons/favicon.ico' },
-    ],
-    apple: [
-      { url: '/favicons/apple-icon-180x180.png', sizes: '180x180', type: 'image/png' },
-    ],
-  },
-  openGraph: {
-    title: "NILXNJXN — new music now",
-    description: "Listen. Feel. Own — preview instantly, buy directly.",
-    images: [{ url: '/LOGO-FINAL.png', width: 1200, height: 630 }],
-  },
+export const metadata = {
+  title: "NILXNJXN | Artist Portfolio",
+  description: "Official artist digital presence for NILXNJXN.",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en" className={cn("dark", functional.variable, comforter.variable, mrsSheppards.variable)}>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background text-foreground`}>
+    <html lang="en" className={`${functional.variable} ${expressive.variable} ${expressiveAlt.variable} dark`}>
+      <body className="antialiased bg-background text-foreground min-h-screen selection:bg-accent selection:text-black">
         {children}
+        <WaveformPlayer />
       </body>
     </html>
   );

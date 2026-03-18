@@ -115,7 +115,7 @@ export function WaveformPlayer() {
         </div>
 
         {/* Volume Control */}
-        <div className="hidden md:flex items-center gap-3 group px-2">
+        <div className="hidden md:flex items-center gap-3 group px-2 shrink-0">
           <HugeiconsIcon icon={volume === 0 ? VolumeMuteIcon : VolumeHighIcon} size={16} className="text-muted-foreground group-hover:text-white transition-colors" />
           <input 
             type="range"
