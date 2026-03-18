@@ -1,18 +1,62 @@
-"use client";
-
-import { motion } from "framer-motion";
+import { useRef, useLayoutEffect } from "react";
 import { Track } from "@/lib/data";
 import { useAudioStore } from "@/store/audioStore";
 import { PlayIcon, PauseIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card";
+import { gsap } from "gsap";
 
-export function TrackCard({ track }: { track: Track }) {
+interface TrackCardProps {
+  track: Track;
+}
+
+export function TrackCard({ track }: TrackCardProps) {
   const { currentTrack, isPlaying, playTrack, togglePlayPause } = useAudioStore();
+  const cardRef = useRef<HTMLDivElement>(null);
+  const priceRef = useRef<HTMLDivElement>(null);
+  const isCurrent = currentTrack?.id === track.id;
+  const isActive = isCurrent && isPlaying;
 
-  const isCurrentTrack = currentTrack?.id === track.id;
+  useLayoutEffect(() => {
+    if (!cardRef.current || !priceRef.current) return;
 
-  const handlePlay = () => {
-    if (isCurrentTrack) {
+    const price = priceRef.current;
+    
+    const ctx = gsap.context(() => {
+      // Magnetic effect for price tag within card
+      const xTo = gsap.quickTo(price, "x", { duration: 0.6, ease: "power3" });
+      const yTo = gsap.quickTo(price, "y", { duration: 0.6, ease: "power3" });
+
+      const onMouseMove = (e: MouseEvent) => {
+        const { left, top, width, height } = cardRef.current!.getBoundingClientRect();
+        const centerX = left + width / 2;
+        const centerY = top + height / 2;
+        const moveX = (e.clientX - centerX) * 0.15;
+        const moveY = (e.clientY - centerY) * 0.15;
+        xTo(moveX);
+        yTo(moveY);
+      };
+
+      const onMouseLeave = () => {
+        xTo(0);
+        yTo(0);
+      };
+
+      cardRef.current?.addEventListener("mousemove", onMouseMove);
+      cardRef.current?.addEventListener("mouseleave", onMouseLeave);
+      
+      return () => {
+        cardRef.current?.removeEventListener("mousemove", onMouseMove);
+        cardRef.current?.removeEventListener("mouseleave", onMouseLeave);
+      };
+    }, cardRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  const handlePlayClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isCurrent) {
       togglePlayPause();
     } else {
       playTrack(track);
@@ -20,42 +64,69 @@ export function TrackCard({ track }: { track: Track }) {
   };
 
   return (
-    <motion.div 
-      whileHover={{ y: -5 }}
-      className="group relative flex-none w-[260px] sm:w-[300px] snap-center shrink-0 space-y-4 cursor-pointer" 
-      onClick={handlePlay}
-    >
-      <div className="relative aspect-square overflow-hidden rounded-[20px] border border-white/5 shadow-2xl transition-all duration-500 group-hover:border-accent/30 group-hover:shadow-[0_0_40px_rgba(34,211,238,0.1)]">
-        <img 
-          src={track.coverUrl} 
-          alt={track.title}
-          className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale-20 group-hover:grayscale-0"
-          loading="lazy"
-        />
-        
-        {/* Play Overlay */}
-        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center backdrop-blur-xs">
-          <div 
-            className="w-16 h-16 bg-white text-black rounded-full shadow-[0_0_30px_rgba(255,255,255,0.3)] flex items-center justify-center scale-90 group-hover:scale-100 transition-transform duration-300"
+    <CardContainer containerClassName="py-4 px-2" className="group">
+      <div ref={cardRef}>
+        <CardBody className="relative bg-white/5 border border-white/10 w-72 h-auto rounded-[20px] p-4 group-hover:bg-white/8 transition-all duration-500 overflow-hidden">
+          {/* Glass Shine Effect */}
+          <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-linear-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
+          
+          {/* Cover Art Image */}
+          <CardItem
+            translateZ="60"
+            className="w-full aspect-square rounded-[16px] overflow-hidden relative mb-4"
           >
-            {isPlaying && isCurrentTrack ? (
-              <HugeiconsIcon icon={PauseIcon} size={24} color="currentColor" />
-            ) : (
-              <HugeiconsIcon icon={PlayIcon} size={24} color="currentColor" className="ml-1" />
-            )}
+            <img 
+              src={track.coverUrl} 
+              alt={track.title}
+              className="w-full h-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-105"
+              loading="lazy"
+            />
+            
+            {/* Audio Interaction Overlay */}
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center backdrop-blur-xs">
+              <button 
+                onClick={handlePlayClick}
+                className="w-16 h-16 bg-white text-black rounded-full shadow-[0_0_30px_rgba(255,255,255,0.3)] flex items-center justify-center scale-90 group-hover:scale-100 transition-transform duration-300 active:scale-95"
+              >
+                <HugeiconsIcon icon={isActive ? PauseIcon : PlayIcon} size={24} color="currentColor" />
+              </button>
+            </div>
+
+            {/* Price Tag Overlay - Upgraded */}
+            <CardItem
+              as="div"
+              translateZ="80"
+              className="absolute top-3 right-3 z-20"
+            >
+              <div 
+                ref={priceRef}
+                className="bg-black/80 backdrop-blur-lg px-4 py-1.5 rounded-full border border-white/20 opacity-0 group-hover:opacity-100 transition-all duration-500 scale-75 group-hover:scale-100 shadow-[0_0_20px_rgba(0,0,0,0.5)] flex items-center gap-1.5"
+              >
+                <div className="w-1 h-1 bg-accent rounded-full animate-pulse" />
+                <span className="text-[10px] font-functional font-bold text-white tracking-[0.2em] uppercase">
+                  {track.price}
+                </span>
+              </div>
+            </CardItem>
+          </CardItem>
+
+          {/* Metadata */}
+          <div className="space-y-1">
+            <CardItem
+              translateZ="40"
+              className="text-white font-functional font-medium truncate text-sm"
+            >
+              {track.title}
+            </CardItem>
+            <CardItem
+              translateZ="20"
+              className="text-muted-foreground font-functional text-[10px] uppercase tracking-[0.2em] font-light italic truncate"
+            >
+              {track.artist}
+            </CardItem>
           </div>
-        </div>
-
-        {/* Price Tag */}
-        <div className="absolute top-4 right-4 bg-background/80 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <span className="text-[10px] font-functional font-medium text-white tracking-widest uppercase">{track.price}</span>
-        </div>
+        </CardBody>
       </div>
-
-      <div className="space-y-1 px-1">
-        <h3 className="text-base font-functional font-medium text-white truncate group-hover:text-accent transition-colors duration-300">{track.title}</h3>
-        <p className="text-[12px] font-functional text-muted-foreground uppercase tracking-wider">{track.artist}</p>
-      </div>
-    </motion.div>
+    </CardContainer>
   );
 }

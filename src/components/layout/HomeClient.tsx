@@ -23,26 +23,6 @@ export function HomeClient({ tracks }: HomeClientProps) {
 
   return (
     <main className="min-h-screen relative selection:bg-accent selection:text-black bg-background">
-      {/* Top Navbar - Reveal on interaction */}
-      <AnimatePresence>
-        {hasInteracted && (
-          <motion.nav 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="fixed top-0 w-full z-40 px-6 py-4 flex justify-between items-center bg-linear-to-b from-background/90 to-transparent backdrop-blur-sm"
-          >
-            <div className="flex items-center gap-3">
-              <img src="/LOGO-FINAL.png" alt="NILXNJXN Logo" className="h-10 w-auto" />
-              <div className="text-xl font-expressive text-white tracking-widest leading-none mt-1">nilxnjxn</div>
-            </div>
-            <div className="flex gap-6 text-sm font-medium text-muted-foreground mr-4">
-              <a href="/music" className="hover:text-white transition-colors">Music</a>
-              <a href="/about" className="hover:text-white transition-colors">About</a>
-            </div>
-          </motion.nav>
-        )}
-      </AnimatePresence>
 
       {/* Hero Section */}
       {featuredTrack && <HeroPlayer track={featuredTrack} onPlay={handleInteraction} hasInteracted={hasInteracted} />}
@@ -96,9 +76,9 @@ export function HomeClient({ tracks }: HomeClientProps) {
                 <div className="space-y-6">
                   <h2 className="text-4xl md:text-5xl font-expressive tracking-tighter text-white">Behind the Sound</h2>
                   <p className="text-lg text-muted-foreground leading-relaxed font-functional font-light">
-                    NILXNJXN creates immersive electronic soundscapes that blur the lines between 
-                    ambient nostalgia and forward-thinking club rhythms. Every release is a 
-                    statement—available here directly from the artist.
+                    Nilxnjxn aka Nila, is an upcoming Hip-hop Artist from Assam, India. 
+                    Exploring the range of human emotion through the seasonal evolution 
+                    of sound. Debut EP "SHADES" dropping 2026.
                   </p>
                   <a href="/about" className="inline-block mt-4 text-accent hover:text-white transition-colors border-b border-accent/30 pb-1 font-functional text-sm tracking-widest uppercase">
                     Read full story →
@@ -107,16 +87,6 @@ export function HomeClient({ tracks }: HomeClientProps) {
               </div>
             </motion.section>
 
-            {/* Footer */}
-            <footer className="w-full pb-32 pt-24 flex flex-col items-center justify-center text-muted-foreground text-xs gap-4 relative z-10 border-t border-white/5 bg-background">
-              <div className="flex gap-6">
-                <a href="/terms" className="hover:text-white transition-colors">Terms of Service</a>
-                <a href="/privacy" className="hover:text-white transition-colors">Privacy Policy</a>
-                <a href="/refunds" className="hover:text-white transition-colors">Refund Policy</a>
-              </div>
-              <p>&copy; {new Date().getFullYear()} NILXNJXN. All rights reserved.</p>
-              <img src="/LOGO-FINAL.png" alt="NILXNJXN Logo" className="h-6 w-auto opacity-30 grayscale hover:grayscale-0 transition-all hover:opacity-100 mt-4" />
-            </footer>
           </motion.div>
         )}
       </AnimatePresence>

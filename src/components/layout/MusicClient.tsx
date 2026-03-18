@@ -1,12 +1,15 @@
 "use client";
 
+import { useState, useRef, useLayoutEffect } from "react";
 import { Track } from "@/lib/data";
 import { TrackCard } from "@/components/player/TrackCard";
-import { motion } from "framer-motion";
-import { ArrowLeftIcon, Search01Icon } from "@hugeicons/core-free-icons";
+import { Search01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import Link from "next/link";
-import { useState } from "react";
+import { motion } from "framer-motion";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface MusicClientProps {
   tracks: Track[];
@@ -14,25 +17,40 @@ interface MusicClientProps {
 
 export function MusicClient({ tracks }: MusicClientProps) {
   const [searchQuery, setSearchQuery] = useState("");
+  const gridRef = useRef<HTMLDivElement>(null);
 
   const filteredTracks = tracks.filter(track => 
     track.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     track.artist.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  useLayoutEffect(() => {
+    if (!gridRef.current) return;
+
+    const ctx = gsap.context(() => {
+      gsap.from(".track-item", {
+        opacity: 0,
+        y: 40,
+        scale: 0.95,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: gridRef.current,
+          start: "top 80%",
+        },
+      });
+    }, gridRef);
+
+    return () => ctx.revert();
+  }, [filteredTracks.length]);
+
   return (
     <main className="min-h-screen bg-background pb-32 pt-32 px-6 selection:bg-accent selection:text-black">
       <div className="max-w-7xl mx-auto space-y-16">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 pt-12">
           <div className="space-y-4">
-             <Link 
-              href="/" 
-              className="group flex items-center gap-2 text-muted-foreground hover:text-white transition-colors font-functional text-xs uppercase tracking-widest"
-            >
-              <HugeiconsIcon icon={ArrowLeftIcon} size={16} className="group-hover:-translate-x-1 transition-transform" />
-              Store / Portfolio
-            </Link>
             <h1 className="text-6xl md:text-8xl font-expressive text-white tracking-tighter">
               Archive
             </h1>
@@ -56,22 +74,18 @@ export function MusicClient({ tracks }: MusicClientProps) {
         </div>
 
         {/* Grid Content */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+        <div 
+          ref={gridRef}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
         >
           {filteredTracks.length > 0 ? (
-            filteredTracks.map((track, index) => (
-              <motion.div
+            filteredTracks.map((track) => (
+              <div
                 key={track.id}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4, delay: index * 0.05 }}
+                className="track-item"
               >
                 <TrackCard track={track} />
-              </motion.div>
+              </div>
             ))
           ) : (
             <div className="col-span-full py-32 text-center space-y-4">
@@ -84,7 +98,7 @@ export function MusicClient({ tracks }: MusicClientProps) {
                </button>
             </div>
           )}
-        </motion.div>
+        </div>
       </div>
 
       {/* Global Bottom Grain Overlay */}

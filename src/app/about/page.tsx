@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowLeftIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import Link from "next/link";
+import { Magnetic } from "@/components/ui/Magnetic";
 
 export default function AboutPage() {
   return (
@@ -21,20 +22,24 @@ export default function AboutPage() {
 
       {/* Content Container */}
       <div className="relative z-10 max-w-4xl mx-auto px-6 pt-32 pb-48">
-        {/* Navigation */}
+        {/* Back Navigation */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
-          className="mb-16"
+          className="mb-12"
         >
-          <Link 
-            href="/" 
-            className="group flex items-center gap-2 text-muted-foreground hover:text-white transition-colors font-functional text-xs uppercase tracking-widest"
-          >
-            <HugeiconsIcon icon={ArrowLeftIcon} size={16} className="group-hover:-translate-x-1 transition-transform" />
-            Back to Home
-          </Link>
+          <Magnetic strength={0.2}>
+            <Link 
+              href="/" 
+              className="group flex items-center gap-3 text-white/40 hover:text-white transition-colors font-functional text-xs uppercase tracking-[0.3em]"
+            >
+              <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:border-accent/50 group-hover:text-accent transition-all">
+                <HugeiconsIcon icon={ArrowLeftIcon} size={18} />
+              </div>
+              <span>Back</span>
+            </Link>
+          </Magnetic>
         </motion.div>
 
         {/* Narrative Section */}
@@ -56,20 +61,21 @@ export default function AboutPage() {
           >
             <div className="space-y-6">
               <p className="text-lg text-white/90 font-light">
-                NILXNJXN is not just a moniker—it is an exploration of the spaces between noise and void. 
-                Born from the shadows of late-night studio sessions and the rhythmic pulse of the urban 
-                underground, the project seeks to translate the untranslatable.
+                Nilxnjxn aka Nila, is an upcoming Hip-hop Artist from Assam, India. 
+                Guided by the motto <span className="text-accent italic">"LIVE FREE, BE YOU"</span>, 
+                he delivers a precise blend of catchy hooks and slick bars.
               </p>
               <p className="text-muted-foreground font-light">
-                Each composition is built on a foundation of raw emotion, using sound as a medium to 
-                document a personal journey through light, shadow, and everything in between.
+                With his debut EP <span className="text-white font-medium italic">"SHADES"</span> (dropping 2026), 
+                Nila explores the vast range of human emotion and behavior. Each track is released in 
+                specific seasons that mirror the mood of the sound.
               </p>
             </div>
             <div className="space-y-6 bg-white/5 backdrop-blur-md p-8 rounded-[32px] border border-white/10 h-fit">
-              <h3 className="text-xs uppercase tracking-[0.2em] text-accent font-medium">Philosophy</h3>
+              <h3 className="text-xs uppercase tracking-[0.2em] text-accent font-medium">Concept</h3>
               <p className="text-sm text-muted-foreground font-light leading-relaxed">
-                "Music is the only medium that can occupy a room without filling it. I strive for 
-                minimalism that feels heavy—sounds that resonate long after the silence returns."
+                "FRESH, AKAD, and LATE are just the beginning. I want to bring a new wave to the existing 
+                rap scene—if you fck with the sound, hop in for the journey of your life."
               </p>
             </div>
           </motion.div>
@@ -87,13 +93,17 @@ export default function AboutPage() {
               By bypassing traditional streaming models, NILXNJXN ensures that the art remains 
               pure and the connection remains unmediated.
             </p>
-            <div className="flex gap-4">
-              <button className="px-6 py-3 bg-white text-black rounded-full font-functional text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all">
-                Support via Store
-              </button>
-              <Link href="/music" className="px-6 py-3 bg-white/5 border border-white/10 text-white rounded-full font-functional text-xs uppercase tracking-widest hover:bg-white/10 transition-all">
-                Explore Music
-              </Link>
+            <div className="flex flex-wrap gap-4">
+              <Magnetic strength={0.3}>
+                <button className="px-8 py-4 bg-white text-black rounded-full font-functional text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all">
+                  Support via Store
+                </button>
+              </Magnetic>
+              <Magnetic strength={0.2}>
+                <Link href="/music" className="px-8 py-4 bg-white/5 border border-white/10 text-white rounded-full font-functional text-xs uppercase tracking-widest hover:bg-white/10 transition-all block">
+                  Explore Music
+                </Link>
+              </Magnetic>
             </div>
           </motion.div>
         </section>
