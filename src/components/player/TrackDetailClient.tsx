@@ -96,7 +96,7 @@ export function TrackDetailClient({ track }: TrackDetailClientProps) {
                   onClick={handlePlay}
                   className="w-20 h-20 md:w-24 md:h-24 bg-white text-black rounded-full flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-2xl"
                 >
-                   <HugeiconsIcon icon={isActive ? PauseIcon : PlayIcon} size={28} md:size={32} color="currentColor" />
+                   <HugeiconsIcon icon={isActive ? PauseIcon : PlayIcon} size={28} className="text-current md:size-8" />
                 </button>
             </div>
           </div>
@@ -135,7 +135,7 @@ export function TrackDetailClient({ track }: TrackDetailClientProps) {
                     size="lg"
                     className="w-full sm:w-auto h-14 md:h-16 px-10 rounded-full bg-white text-black hover:bg-accent hover:text-black transition-all flex items-center justify-center gap-3 font-functional font-bold text-xs md:text-sm tracking-widest uppercase"
                   >
-                    <HugeiconsIcon icon={isActive ? PauseIcon : PlayIcon} size={18} color="currentColor" />
+                    <HugeiconsIcon icon={isActive ? PauseIcon : PlayIcon} size={18} className="text-current" />
                     {isActive ? "Pause" : "Play Preview"}
                   </Button>
                </Magnetic>
@@ -146,7 +146,7 @@ export function TrackDetailClient({ track }: TrackDetailClientProps) {
                     size="lg"
                     className="w-full sm:w-auto h-14 md:h-16 px-10 rounded-full border-white/20 bg-transparent text-white hover:bg-white hover:text-black transition-all flex items-center justify-center gap-3 font-functional font-bold text-xs md:text-sm tracking-widest uppercase shadow-[0_0_40px_rgba(255,255,255,0.05)]"
                   >
-                    <HugeiconsIcon icon={ShoppingCart01Icon} size={18} color="currentColor" />
+                    <HugeiconsIcon icon={ShoppingCart01Icon} size={18} className="text-current" />
                     Unlock {track.price}
                   </Button>
                </Magnetic>

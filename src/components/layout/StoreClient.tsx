@@ -26,7 +26,7 @@ export function StoreClient({ tracks }: StoreClientProps) {
             animate={{ scale: 1, opacity: 1 }}
             className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center"
            >
-              <HugeiconsIcon icon={ShoppingCart01Icon} size={28} md:size={32} className="text-accent" />
+              <HugeiconsIcon icon={ShoppingCart01Icon} size={28} className="text-accent md:size-8" />
            </motion.div>
            
            <div className="space-y-4">

@@ -116,8 +116,8 @@ export function Footer() {
             </div>
             
             <div className="flex items-center gap-2">
-              <span className="text-[10px] uppercase tracking-[0.2em] font-functional text-muted-foreground">Design by</span>
-              <span className="text-[10px] uppercase tracking-[0.2em] font-functional text-white font-bold underline decoration-accent/30 underline-offset-4">Antigravity</span>
+              <span className="text-[10px] uppercase tracking-[0.2em] font-functional text-muted-foreground">Made with ❤️ by</span>
+              <span className="text-[10px] uppercase tracking-[0.2em] font-functional text-white font-bold underline decoration-accent/30 underline-offset-4">Sddon</span>
             </div>
           </div>
 
