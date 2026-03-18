@@ -1,6 +1,13 @@
 import { useRef, useLayoutEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { motion, AnimatePresence } from "framer-motion";
+import { PlayIcon, PauseIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Track } from "@/lib/data";
+import { useAudioStore } from "@/store/audioStore";
+import { Magnetic } from "@/components/ui/Magnetic";
+import { Button } from "@/components/ui/button";
 
 gsap.registerPlugin(ScrollTrigger);
 

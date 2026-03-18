@@ -1,15 +1,5 @@
 import { create } from 'zustand';
-
-interface Track {
-  id: string;
-  title: string;
-  artist: string;
-  audioUrl: string;
-  coverUrl: string;
-  price: string;
-  duration?: string;
-  slug?: string;
-}
+import { Track } from '@/lib/data';
 
 interface AudioState {
   currentTrack: Track | null;
