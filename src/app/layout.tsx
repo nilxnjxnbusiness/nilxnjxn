@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Geist, Geist_Mono, Figtree } from "next/font/google";
+import { Geist, Geist_Mono, Figtree, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
-const figtree = Figtree({ subsets: ["latin"], variable: "--font-sans" });
+const functional = Inter({ subsets: ["latin"], variable: "--font-functional" });
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,12 +18,12 @@ const geistMono = Geist_Mono({
 
 const comforter = localFont({
   src: "../../public/fonts/Comforter/Comforter-Regular.ttf",
-  variable: "--font-comforter",
+  variable: "--font-expressive-alt",
 });
 
 const mrsSheppards = localFont({
   src: "../../public/fonts/Mrs_Sheppards/MrsSheppards-Regular.ttf",
-  variable: "--font-mrs-sheppards",
+  variable: "--font-expressive",
 });
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL 
@@ -62,7 +62,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("dark font-sans", figtree.variable, comforter.variable, mrsSheppards.variable)}>
+    <html lang="en" className={cn("dark", functional.variable, comforter.variable, mrsSheppards.variable)}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background text-foreground`}>
         {children}
       </body>

@@ -32,7 +32,7 @@ export async function getTracks(): Promise<Track[]> {
       title,
       artist: "NILXNJXN",
       coverUrl: `/cover-arts/${file}`,
-      audioUrl: "", // Future audio URL placeholder
+      audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", // Demo audio
       price: "₹150",
       slug: rawTitle.toLowerCase(),
     };
