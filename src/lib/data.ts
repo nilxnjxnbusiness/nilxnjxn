@@ -50,5 +50,8 @@ export async function getTracks(): Promise<Track[]> {
       slug: rawTitle.toLowerCase(),
       season,
     };
-  });
+  }).sort((a, b) => {
+      const priority = { AKAD: 0, FRESH: 1, LATE: 2 };
+      return priority[a.season || 'LATE'] - priority[b.season || 'LATE'];
+    });
 }

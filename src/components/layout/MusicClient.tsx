@@ -132,7 +132,7 @@ export function MusicClient({ tracks }: MusicClientProps) {
                 transition={{ duration: 0.5, delay: i * 0.05 }}
                 className="track-item flex w-full justify-center"
               >
-                <TrackCard track={track} />
+                <TrackCard track={track} priority={i < 4} />
               </motion.div>
             ))
           ) : (

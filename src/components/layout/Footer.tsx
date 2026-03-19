@@ -4,6 +4,9 @@ import {
   YoutubeIcon,
   TwitterIcon,
   WhatsappIcon,
+  AppleMusicIcon,
+  AmazonIcon,
+  MusicNote01Icon,
 } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { Magnetic } from '@/components/ui/Magnetic';
@@ -27,6 +30,21 @@ const socialLinks = [
     name: 'WhatsApp',
     icon: WhatsappIcon,
     href: 'https://www.whatsapp.com/channel/0029VaibEslFCCoXBTMA270I',
+  },
+  {
+    name: 'Apple Music',
+    icon: AppleMusicIcon,
+    href: 'https://music.apple.com/il/artist/nilxnjxn/1801565249',
+  },
+  {
+    name: 'Shazam',
+    icon: MusicNote01Icon,
+    href: 'https://www.shazam.com/artist/nilxnjxn/1801565249',
+  },
+  {
+    name: 'Amazon Music',
+    icon: AmazonIcon,
+    href: 'https://music.amazon.in/artists/B0F15TXBWY/nilxnjxn',
   },
 ];
 
@@ -165,7 +183,7 @@ export function Footer() {
             target="_blank"
             className="font-functional decoration-accent/30 hover:text-accent text-[10px] font-bold tracking-[0.2em] text-white uppercase underline underline-offset-4 transition-colors"
           >
-            Sddon
+            Sddion
           </Link>
         </div>
       </div>

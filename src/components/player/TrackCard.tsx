@@ -13,9 +13,10 @@ import Link from 'next/link';
 
 interface TrackCardProps {
   track: Track;
+  priority?: boolean;
 }
 
-export function TrackCard({ track }: TrackCardProps) {
+export function TrackCard({ track, priority = false }: TrackCardProps) {
   const { currentTrack, isPlaying, playTrack, togglePlayPause } = useAudioStore();
   const cardRef = useRef<HTMLDivElement>(null);
   const infoRef = useRef<HTMLDivElement>(null);
@@ -81,6 +82,7 @@ export function TrackCard({ track }: TrackCardProps) {
           <LazyImage
             src={track.coverUrl}
             alt={track.title}
+            priority={priority}
             className="transition-transform duration-1000 group-hover:scale-110"
           />
 

@@ -143,9 +143,9 @@ export function HomeClient({ tracks }: HomeClientProps) {
                   </div>
 
                   <div className="no-scrollbar -mx-6 flex snap-x snap-mandatory gap-12 overflow-x-auto px-6 pb-12">
-                    {otherTracks.map((track) => (
+                    {otherTracks.map((track, index) => (
                       <div key={track.id} className="snap-center">
-                        <TrackCard track={track} />
+                        <TrackCard track={track} priority={index < 2} />
                       </div>
                     ))}
                   </div>

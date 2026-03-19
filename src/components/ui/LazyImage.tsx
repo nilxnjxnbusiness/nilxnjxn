@@ -6,35 +6,38 @@ import { Skeleton } from './Skeleton';
 import Image from 'next/image';
 
 interface LazyImageProps {
-  src: string;
+  src: string;  
   alt: string;
   className?: string;
   aspectRatio?: string;
+  priority?: boolean;
 }
 
-export function LazyImage({ src, alt, className, aspectRatio = 'aspect-square' }: LazyImageProps) {
+export function LazyImage({
+  src,
+  alt,
+  className,
+  aspectRatio = 'aspect-square',
+  priority = false,
+}: LazyImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    // We already have onLoad on the Image component below,
-    // but we use this effect to ensure states are reset when src changes.
-    // Resetting in cleanup avoids the "cascading renders" lint error
-    // because it doesn't happen during the synchronous mount/update phase of the effect.
-    return () => {
-      setIsLoaded(false);
-      setError(false);
-    };
+    // Reset state when src changes
+    setIsLoaded(false);
+    setError(false);
   }, [src]);
 
   return (
-    <div className={cn('relative overflow-hidden', aspectRatio, className)}>
+    <div className={cn('relative overflow-hidden bg-white/5', aspectRatio, className)}>
       {!isLoaded && !error && <Skeleton className="absolute inset-0 z-10" />}
 
       <Image
         src={src}
         alt={alt}
         fill
+        priority={priority}
         className={cn(
           'object-cover transition-all duration-1000 ease-out',
           isLoaded
@@ -43,7 +46,7 @@ export function LazyImage({ src, alt, className, aspectRatio = 'aspect-square' }
         )}
         onLoad={() => setIsLoaded(true)}
         onError={() => setError(true)}
-        loading="lazy"
+        loading={priority ? 'eager' : 'lazy'}
       />
 
       {error && (
