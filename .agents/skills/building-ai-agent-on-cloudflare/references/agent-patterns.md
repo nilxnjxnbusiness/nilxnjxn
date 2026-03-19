@@ -7,8 +7,8 @@ Advanced patterns for building sophisticated agents.
 Agents can expose tools that AI models can call:
 
 ```typescript
-import { Agent, Connection } from "agents";
-import { z } from "zod";
+import { Agent, Connection } from 'agents';
+import { z } from 'zod';
 
 interface Tool {
   name: string;
@@ -23,8 +23,8 @@ export class ToolAgent extends Agent<Env, State> {
   async onStart() {
     // Register tools
     this.registerTool({
-      name: "get_weather",
-      description: "Get current weather for a city",
+      name: 'get_weather',
+      description: 'Get current weather for a city',
       parameters: z.object({ city: z.string() }),
       handler: async ({ city }) => {
         const res = await fetch(`https://api.weather.com/${city}`);
@@ -33,8 +33,8 @@ export class ToolAgent extends Agent<Env, State> {
     });
 
     this.registerTool({
-      name: "search_database",
-      description: "Search the document database",
+      name: 'search_database',
+      description: 'Search the document database',
       parameters: z.object({ query: z.string(), limit: z.number().default(10) }),
       handler: async ({ query, limit }) => {
         const results = await this.sql`
@@ -54,7 +54,7 @@ export class ToolAgent extends Agent<Env, State> {
   async onMessage(connection: Connection, message: string) {
     const data = JSON.parse(message);
 
-    if (data.type === "chat") {
+    if (data.type === 'chat') {
       await this.handleChatWithTools(connection, data.content);
     }
   }
@@ -62,7 +62,7 @@ export class ToolAgent extends Agent<Env, State> {
   private async handleChatWithTools(connection: Connection, userMessage: string) {
     // Build tool descriptions for the AI
     const toolDescriptions = Array.from(this.tools.values()).map((t) => ({
-      type: "function",
+      type: 'function',
       function: {
         name: t.name,
         description: t.description,
@@ -71,11 +71,11 @@ export class ToolAgent extends Agent<Env, State> {
     }));
 
     // First AI call - may request tool use
-    const response = await this.env.AI.run("@cf/meta/llama-3-8b-instruct", {
+    const response = await this.env.AI.run('@cf/meta/llama-3-8b-instruct', {
       messages: [
-        { role: "system", content: "You are a helpful assistant with access to tools." },
+        { role: 'system', content: 'You are a helpful assistant with access to tools.' },
         ...this.state.messages,
-        { role: "user", content: userMessage },
+        { role: 'user', content: userMessage },
       ],
       tools: toolDescriptions,
     });
@@ -89,27 +89,31 @@ export class ToolAgent extends Agent<Env, State> {
           const result = await tool.handler(params);
 
           // Send tool result back to AI
-          const finalResponse = await this.env.AI.run("@cf/meta/llama-3-8b-instruct", {
+          const finalResponse = await this.env.AI.run('@cf/meta/llama-3-8b-instruct', {
             messages: [
               ...this.state.messages,
-              { role: "user", content: userMessage },
-              { role: "assistant", tool_calls: response.tool_calls },
-              { role: "tool", tool_call_id: toolCall.id, content: result },
+              { role: 'user', content: userMessage },
+              { role: 'assistant', tool_calls: response.tool_calls },
+              { role: 'tool', tool_call_id: toolCall.id, content: result },
             ],
           });
 
-          connection.send(JSON.stringify({
-            type: "response",
-            content: finalResponse.response,
-            toolUsed: toolCall.function.name,
-          }));
+          connection.send(
+            JSON.stringify({
+              type: 'response',
+              content: finalResponse.response,
+              toolUsed: toolCall.function.name,
+            }),
+          );
         }
       }
     } else {
-      connection.send(JSON.stringify({
-        type: "response",
-        content: response.response,
-      }));
+      connection.send(
+        JSON.stringify({
+          type: 'response',
+          content: response.response,
+        }),
+      );
     }
   }
 }
@@ -129,9 +133,9 @@ export class RAGAgent extends Agent<Env, State> {
   async onMessage(connection: Connection, message: string) {
     const data = JSON.parse(message);
 
-    if (data.type === "chat") {
+    if (data.type === 'chat') {
       // 1. Generate embedding for query
-      const embedding = await this.env.AI.run("@cf/baai/bge-base-en-v1.5", {
+      const embedding = await this.env.AI.run('@cf/baai/bge-base-en-v1.5', {
         text: data.content,
       });
 
@@ -142,18 +146,16 @@ export class RAGAgent extends Agent<Env, State> {
       });
 
       // 3. Build context from results
-      const context = results.matches
-        .map((m) => m.metadata?.text || "")
-        .join("\n\n");
+      const context = results.matches.map((m) => m.metadata?.text || '').join('\n\n');
 
       // 4. Generate response with context
-      const response = await this.env.AI.run("@cf/meta/llama-3-8b-instruct", {
+      const response = await this.env.AI.run('@cf/meta/llama-3-8b-instruct', {
         messages: [
           {
-            role: "system",
+            role: 'system',
             content: `Answer based on this context:\n\n${context}\n\nIf the context doesn't contain relevant information, say so.`,
           },
-          { role: "user", content: data.content },
+          { role: 'user', content: data.content },
         ],
       });
 
@@ -161,30 +163,34 @@ export class RAGAgent extends Agent<Env, State> {
       this.setState({
         messages: [
           ...this.state.messages,
-          { role: "user", content: data.content },
-          { role: "assistant", content: response.response },
+          { role: 'user', content: data.content },
+          { role: 'assistant', content: response.response },
         ],
       });
 
-      connection.send(JSON.stringify({
-        type: "response",
-        content: response.response,
-        sources: results.matches.map((m) => m.metadata?.source),
-      }));
+      connection.send(
+        JSON.stringify({
+          type: 'response',
+          content: response.response,
+          sources: results.matches.map((m) => m.metadata?.source),
+        }),
+      );
     }
   }
 
   // Ingest documents into vector store
   async ingestDocument(doc: { id: string; text: string; source: string }) {
-    const embedding = await this.env.AI.run("@cf/baai/bge-base-en-v1.5", {
+    const embedding = await this.env.AI.run('@cf/baai/bge-base-en-v1.5', {
       text: doc.text,
     });
 
-    await this.env.VECTORIZE.upsert([{
-      id: doc.id,
-      values: embedding.data[0],
-      metadata: { text: doc.text, source: doc.source },
-    }]);
+    await this.env.VECTORIZE.upsert([
+      {
+        id: doc.id,
+        values: embedding.data[0],
+        metadata: { text: doc.text, source: doc.source },
+      },
+    ]);
   }
 }
 ```
@@ -204,51 +210,51 @@ export class OrchestratorAgent extends Agent<Env, State> {
   async onMessage(connection: Connection, message: string) {
     const data = JSON.parse(message);
 
-    if (data.type === "create_article") {
-      connection.send(JSON.stringify({ type: "status", step: "researching" }));
+    if (data.type === 'create_article') {
+      connection.send(JSON.stringify({ type: 'status', step: 'researching' }));
 
       // Step 1: Research agent gathers information
-      const researchResult = await this.callAgent(
-        this.env.RESEARCHER,
-        data.topic,
-        { action: "research", topic: data.topic }
-      );
+      const researchResult = await this.callAgent(this.env.RESEARCHER, data.topic, {
+        action: 'research',
+        topic: data.topic,
+      });
 
-      connection.send(JSON.stringify({ type: "status", step: "writing" }));
+      connection.send(JSON.stringify({ type: 'status', step: 'writing' }));
 
       // Step 2: Writer agent creates draft
-      const draftResult = await this.callAgent(
-        this.env.WRITER,
-        data.topic,
-        { action: "write", research: researchResult, topic: data.topic }
-      );
+      const draftResult = await this.callAgent(this.env.WRITER, data.topic, {
+        action: 'write',
+        research: researchResult,
+        topic: data.topic,
+      });
 
-      connection.send(JSON.stringify({ type: "status", step: "reviewing" }));
+      connection.send(JSON.stringify({ type: 'status', step: 'reviewing' }));
 
       // Step 3: Reviewer agent improves draft
-      const finalResult = await this.callAgent(
-        this.env.REVIEWER,
-        data.topic,
-        { action: "review", draft: draftResult }
-      );
+      const finalResult = await this.callAgent(this.env.REVIEWER, data.topic, {
+        action: 'review',
+        draft: draftResult,
+      });
 
-      connection.send(JSON.stringify({
-        type: "complete",
-        article: finalResult,
-      }));
+      connection.send(
+        JSON.stringify({
+          type: 'complete',
+          article: finalResult,
+        }),
+      );
     }
   }
 
   private async callAgent(
     namespace: DurableObjectNamespace,
     id: string,
-    payload: any
+    payload: any,
   ): Promise<string> {
     const agentId = namespace.idFromName(id);
     const agent = namespace.get(agentId);
 
-    const response = await agent.fetch("http://agent/task", {
-      method: "POST",
+    const response = await agent.fetch('http://agent/task', {
+      method: 'POST',
       body: JSON.stringify(payload),
     });
 
@@ -277,7 +283,7 @@ export class ApprovalAgent extends Agent<Env, State> {
   async onMessage(connection: Connection, message: string) {
     const data = JSON.parse(message);
 
-    if (data.type === "request_action") {
+    if (data.type === 'request_action') {
       // Action requires approval
       if (this.requiresApproval(data.action)) {
         const approvalId = crypto.randomUUID();
@@ -294,12 +300,14 @@ export class ApprovalAgent extends Agent<Env, State> {
           ],
         });
 
-        connection.send(JSON.stringify({
-          type: "approval_required",
-          approvalId,
-          action: data.action,
-          description: this.describeAction(data.action, data.payload),
-        }));
+        connection.send(
+          JSON.stringify({
+            type: 'approval_required',
+            approvalId,
+            action: data.action,
+            description: this.describeAction(data.action, data.payload),
+          }),
+        );
 
         return;
       }
@@ -308,17 +316,13 @@ export class ApprovalAgent extends Agent<Env, State> {
       await this.executeAction(connection, data.action, data.payload);
     }
 
-    if (data.type === "approve") {
-      const approval = this.state.pendingApprovals.find(
-        (a) => a.id === data.approvalId
-      );
+    if (data.type === 'approve') {
+      const approval = this.state.pendingApprovals.find((a) => a.id === data.approvalId);
 
       if (approval) {
         // Remove from pending
         this.setState({
-          pendingApprovals: this.state.pendingApprovals.filter(
-            (a) => a.id !== data.approvalId
-          ),
+          pendingApprovals: this.state.pendingApprovals.filter((a) => a.id !== data.approvalId),
         });
 
         // Execute the approved action
@@ -326,22 +330,22 @@ export class ApprovalAgent extends Agent<Env, State> {
       }
     }
 
-    if (data.type === "reject") {
+    if (data.type === 'reject') {
       this.setState({
-        pendingApprovals: this.state.pendingApprovals.filter(
-          (a) => a.id !== data.approvalId
-        ),
+        pendingApprovals: this.state.pendingApprovals.filter((a) => a.id !== data.approvalId),
       });
 
-      connection.send(JSON.stringify({
-        type: "action_rejected",
-        approvalId: data.approvalId,
-      }));
+      connection.send(
+        JSON.stringify({
+          type: 'action_rejected',
+          approvalId: data.approvalId,
+        }),
+      );
     }
   }
 
   private requiresApproval(action: string): boolean {
-    const sensitiveActions = ["delete", "send_email", "make_payment", "publish"];
+    const sensitiveActions = ['delete', 'send_email', 'make_payment', 'publish'];
     return sensitiveActions.includes(action);
   }
 
@@ -354,11 +358,13 @@ export class ApprovalAgent extends Agent<Env, State> {
     // Execute the action
     const result = await this.performAction(action, data);
 
-    connection.send(JSON.stringify({
-      type: "action_completed",
-      action,
-      result,
-    }));
+    connection.send(
+      JSON.stringify({
+        type: 'action_completed',
+        action,
+        result,
+      }),
+    );
   }
 }
 ```
@@ -372,28 +378,30 @@ export class StreamingAgent extends Agent<Env, State> {
   async onMessage(connection: Connection, message: string) {
     const data = JSON.parse(message);
 
-    if (data.type === "chat") {
+    if (data.type === 'chat') {
       // Start streaming response
-      const stream = await this.env.AI.run("@cf/meta/llama-3-8b-instruct", {
+      const stream = await this.env.AI.run('@cf/meta/llama-3-8b-instruct', {
         messages: [
-          { role: "system", content: "You are a helpful assistant." },
+          { role: 'system', content: 'You are a helpful assistant.' },
           ...this.state.messages,
-          { role: "user", content: data.content },
+          { role: 'user', content: data.content },
         ],
         stream: true,
       });
 
-      let fullResponse = "";
+      let fullResponse = '';
 
       // Stream chunks to client
       for await (const chunk of stream) {
         if (chunk.response) {
           fullResponse += chunk.response;
-          connection.send(JSON.stringify({
-            type: "stream",
-            content: chunk.response,
-            done: false,
-          }));
+          connection.send(
+            JSON.stringify({
+              type: 'stream',
+              content: chunk.response,
+              done: false,
+            }),
+          );
         }
       }
 
@@ -401,17 +409,19 @@ export class StreamingAgent extends Agent<Env, State> {
       this.setState({
         messages: [
           ...this.state.messages,
-          { role: "user", content: data.content },
-          { role: "assistant", content: fullResponse },
+          { role: 'user', content: data.content },
+          { role: 'assistant', content: fullResponse },
         ],
       });
 
       // Signal completion
-      connection.send(JSON.stringify({
-        type: "stream",
-        content: "",
-        done: true,
-      }));
+      connection.send(
+        JSON.stringify({
+          type: 'stream',
+          content: '',
+          done: true,
+        }),
+      );
     }
   }
 }
@@ -425,37 +435,32 @@ Agents can connect to MCP servers as clients:
 export class MCPClientAgent extends Agent<Env, State> {
   async onStart() {
     // Connect to external MCP server
-    await this.addMcpServer(
-      "github",
-      "https://github-mcp.example.com/sse",
-      { headers: { Authorization: `Bearer ${this.env.GITHUB_TOKEN}` } }
-    );
+    await this.addMcpServer('github', 'https://github-mcp.example.com/sse', {
+      headers: { Authorization: `Bearer ${this.env.GITHUB_TOKEN}` },
+    });
 
-    await this.addMcpServer(
-      "database",
-      "https://db-mcp.example.com/sse"
-    );
+    await this.addMcpServer('database', 'https://db-mcp.example.com/sse');
   }
 
   async onMessage(connection: Connection, message: string) {
     const data = JSON.parse(message);
 
-    if (data.type === "use_tool") {
+    if (data.type === 'use_tool') {
       // Call tool on connected MCP server
       const servers = await this.getMcpServers();
       const server = servers.find((s) => s.name === data.server);
 
       if (server) {
         const result = await server.callTool(data.tool, data.params);
-        connection.send(JSON.stringify({ type: "tool_result", result }));
+        connection.send(JSON.stringify({ type: 'tool_result', result }));
       }
     }
   }
 
   async onClose() {
     // Cleanup MCP connections
-    await this.removeMcpServer("github");
-    await this.removeMcpServer("database");
+    await this.removeMcpServer('github');
+    await this.removeMcpServer('database');
   }
 }
 ```

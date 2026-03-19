@@ -1,7 +1,7 @@
-import { Metadata } from "next";
-import { getTracks } from "@/lib/data";
-import { notFound } from "next/navigation";
-import { TrackDetailClient } from "@/components/player/TrackDetailClient";
+import { Metadata } from 'next';
+import { getTracks } from '@/lib/data';
+import { notFound } from 'next/navigation';
+import { TrackDetailClient } from '@/components/player/TrackDetailClient';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const tracks = await getTracks();
   const track = tracks.find((t) => t.slug === slug);
 
-  if (!track) return { title: "Track Not Found" };
+  if (!track) return { title: 'Track Not Found' };
 
   return {
     title: `${track.title} | NILXNJXN`,

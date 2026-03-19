@@ -15,7 +15,7 @@ class MyAgent extends Agent<Env, { count: number }> {
   }
 
   onStateUpdate(state: State, source: string) {
-    console.log("State updated by:", source);
+    console.log('State updated by:', source);
   }
 }
 ```
@@ -33,7 +33,7 @@ class MyAgent extends Agent<Env, { count: number }> {
 interface State {
   currentUser: { id: string; name: string };
   preferences: Record<string, string>;
-  recentMessages: Message[];  // Keep limited, e.g., last 50
+  recentMessages: Message[]; // Keep limited, e.g., last 50
   isTyping: boolean;
 }
 ```
@@ -113,14 +113,14 @@ The SDK includes a built-in queue for background task processing. Tasks are stor
 
 ### Queue Methods
 
-| Method | Purpose |
-|--------|---------|
-| `queue(callback, payload)` | Add task, returns task ID |
-| `dequeue(id)` | Remove specific task |
-| `dequeueAll()` | Clear entire queue |
+| Method                       | Purpose                       |
+| ---------------------------- | ----------------------------- |
+| `queue(callback, payload)`   | Add task, returns task ID     |
+| `dequeue(id)`                | Remove specific task          |
+| `dequeueAll()`               | Clear entire queue            |
 | `dequeueAllByCallback(name)` | Remove tasks by callback name |
-| `getQueue(id)` | Get single task |
-| `getQueues(key, value)` | Find tasks by payload field |
+| `getQueue(id)`               | Get single task               |
+| `getQueues(key, value)`      | Find tasks by payload field   |
 
 ### Queue Example
 
@@ -129,8 +129,8 @@ export class TaskAgent extends Agent<Env, State> {
   async onMessage(connection: Connection, message: string) {
     const data = JSON.parse(message);
 
-    if (data.type === "process_later") {
-      const taskId = await this.queue("processItem", {
+    if (data.type === 'process_later') {
+      const taskId = await this.queue('processItem', {
         itemId: data.itemId,
         priority: data.priority,
       });
@@ -148,6 +148,7 @@ export class TaskAgent extends Agent<Env, State> {
 ```
 
 **Queue characteristics:**
+
 - Sequential processing (no parallelization)
 - Persists across agent restarts
 - No built-in retry mechanism
@@ -160,7 +161,7 @@ export class TaskAgent extends Agent<Env, State> {
 Custom methods automatically have full agent context. Use `getCurrentAgent()` to access context from external functions.
 
 ```typescript
-import { getCurrentAgent } from "agents";
+import { getCurrentAgent } from 'agents';
 
 // External utility function
 async function logActivity(action: string) {
@@ -174,12 +175,13 @@ async function logActivity(action: string) {
 export class MyAgent extends Agent<Env, State> {
   async performAction() {
     // Context automatically available
-    await logActivity("action_performed");
+    await logActivity('action_performed');
   }
 }
 ```
 
 `getCurrentAgent<T>()` returns:
+
 - `agent` - The current agent instance
 - `connection` - Connection object (if applicable)
 - `request` - Request object (if applicable)
@@ -248,15 +250,18 @@ Track ephemeral state for each connected client:
 
 ```typescript
 export class MultiUserAgent extends Agent<Env, State> {
-  private connectionState = new Map<string, {
-    userId: string;
-    cursor: { x: number; y: number };
-    lastActivity: number;
-  }>();
+  private connectionState = new Map<
+    string,
+    {
+      userId: string;
+      cursor: { x: number; y: number };
+      lastActivity: number;
+    }
+  >();
 
   async onConnect(connection: Connection) {
     this.connectionState.set(connection.id, {
-      userId: "",
+      userId: '',
       cursor: { x: 0, y: 0 },
       lastActivity: Date.now(),
     });
@@ -290,13 +295,11 @@ export class MigratingAgent extends Agent<Env, StateV2> {
     const rawState = this.state as any;
 
     if (!rawState.version || rawState.version < 2) {
-      const migratedMessages = (rawState.messages || []).map(
-        (content: string, i: number) => ({
-          id: `migrated-${i}`,
-          content,
-          timestamp: new Date().toISOString(),
-        })
-      );
+      const migratedMessages = (rawState.messages || []).map((content: string, i: number) => ({
+        id: `migrated-${i}`,
+        content,
+        timestamp: new Date().toISOString(),
+      }));
 
       this.setState({
         messages: migratedMessages,

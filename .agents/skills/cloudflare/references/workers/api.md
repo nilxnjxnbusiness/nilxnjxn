@@ -9,10 +9,10 @@ export default {
     if (request.method === 'POST' && url.pathname === '/api') {
       const body = await request.json();
       return new Response(JSON.stringify({ id: 1 }), {
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       });
     }
-    return fetch(request);  // Subrequest to origin
+    return fetch(request); // Subrequest to origin
   },
 };
 ```
@@ -20,8 +20,8 @@ export default {
 ## Execution Context
 
 ```typescript
-ctx.waitUntil(logAnalytics(request));  // Background work, don't block response
-ctx.passThroughOnException();  // Failover to origin on error
+ctx.waitUntil(logAnalytics(request)); // Background work, don't block response
+ctx.passThroughOnException(); // Failover to origin on error
 ```
 
 **Never** `await` background operations - use `ctx.waitUntil()`.
@@ -62,7 +62,7 @@ if (!response) {
   response = await fetch(request);
   response = new Response(response.body, response);
   response.headers.set('Cache-Control', 'max-age=3600');
-  ctx.waitUntil(cache.put(request, response.clone()));  // Clone before caching
+  ctx.waitUntil(cache.put(request, response.clone())); // Clone before caching
 }
 ```
 
@@ -76,7 +76,7 @@ return new HTMLRewriter()
       if (href?.startsWith('http://')) {
         el.setAttribute('href', href.replace('http://', 'https://'));
       }
-    }
+    },
   })
   .transform(response);
 ```
@@ -91,7 +91,7 @@ return new HTMLRewriter()
 const [client, server] = Object.values(new WebSocketPair());
 
 server.accept();
-server.addEventListener('message', event => {
+server.addEventListener('message', (event) => {
   server.send(`Echo: ${event.data}`);
 });
 
@@ -106,11 +106,11 @@ export class WebSocketDO {
   async webSocketMessage(ws: WebSocket, message: string) {
     ws.send(`Echo: ${message}`);
   }
-  
+
   async webSocketClose(ws: WebSocket, code: number, reason: string) {
     // Cleanup on close
   }
-  
+
   async webSocketError(ws: WebSocket, error: Error) {
     console.error('WebSocket error:', error);
   }
@@ -126,20 +126,20 @@ Hibernation automatically suspends inactive connections (no CPU cost), wakes on 
 ```typescript
 export class Counter {
   private value = 0;
-  
+
   constructor(private state: DurableObjectState) {
     state.blockConcurrencyWhile(async () => {
       this.value = (await state.storage.get('value')) || 0;
     });
   }
-  
+
   // Export methods directly - called via RPC (type-safe, zero serialization)
   async increment(): Promise<number> {
     this.value++;
     await this.state.storage.put('value', this.value);
     return this.value;
   }
-  
+
   async getValue(): Promise<number> {
     return this.value;
   }
@@ -181,7 +181,9 @@ return env.SERVICE_B.fetch(request);
 
 // With RPC (2024+) - same as Durable Objects RPC
 export class ServiceWorker {
-  async getData() { return { data: 'value' }; }
+  async getData() {
+    return { data: 'value' };
+  }
 }
 // Usage: const data = await env.SERVICE_B.getData();
 ```

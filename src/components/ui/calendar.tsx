@@ -1,21 +1,16 @@
-'use client'
+'use client';
 
-import * as React from 'react'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { ArrowLeft01Icon, ArrowRight01Icon } from '@hugeicons/core-free-icons'
-import { DayPicker } from 'react-day-picker'
+import * as React from 'react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { ArrowLeft01Icon, ArrowRight01Icon } from '@hugeicons/core-free-icons';
+import { DayPicker } from 'react-day-picker';
 
-import { cn } from '@/lib/utils'
-import { buttonVariants } from '@/components/ui/button'
+import { cn } from '@/lib/utils';
+import { buttonVariants } from '@/components/ui/button';
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>
+export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
-function Calendar({
-  className,
-  classNames,
-  showOutsideDays = true,
-  ...props
-}: CalendarProps) {
+function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) {
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
@@ -36,8 +31,7 @@ function Calendar({
         ),
         month_grid: 'w-full border-collapse space-y-1',
         weekdays: 'flex',
-        weekday:
-          'text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]',
+        weekday: 'text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]',
         week: 'flex w-full mt-2',
         day: cn(
           buttonVariants({ variant: 'ghost' }),
@@ -50,23 +44,22 @@ function Calendar({
         outside:
           'day-outside text-muted-foreground aria-selected:bg-accent/50 aria-selected:text-muted-foreground',
         disabled: 'text-muted-foreground opacity-50',
-        range_middle:
-          'aria-selected:bg-accent aria-selected:text-accent-foreground',
+        range_middle: 'aria-selected:bg-accent aria-selected:text-accent-foreground',
         hidden: 'invisible',
         ...classNames,
       }}
       components={{
         Chevron: ({ ...props }) => {
           if (props.orientation === 'left') {
-            return <HugeiconsIcon icon={ArrowLeft01Icon} size={16} />
+            return <HugeiconsIcon icon={ArrowLeft01Icon} size={16} />;
           }
-          return <HugeiconsIcon icon={ArrowRight01Icon} size={16} />
+          return <HugeiconsIcon icon={ArrowRight01Icon} size={16} />;
         },
       }}
       {...props}
     />
-  )
+  );
 }
-Calendar.displayName = 'Calendar'
+Calendar.displayName = 'Calendar';
 
-export { Calendar }
+export { Calendar };

@@ -1,5 +1,5 @@
-import { getTracks } from "@/lib/data";
-import { MusicClient } from "@/components/layout/MusicClient";
+import { getTracks } from '@/lib/data';
+import { MusicClient } from '@/components/layout/MusicClient';
 
 export default async function MusicPage() {
   const tracks = await getTracks();

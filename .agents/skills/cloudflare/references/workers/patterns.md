@@ -4,7 +4,12 @@
 
 ```typescript
 class HTTPError extends Error {
-  constructor(public status: number, message: string) { super(message); }
+  constructor(
+    public status: number,
+    message: string,
+  ) {
+    super(message);
+  }
 }
 
 export default {
@@ -14,7 +19,8 @@ export default {
     } catch (error) {
       if (error instanceof HTTPError) {
         return new Response(JSON.stringify({ error: error.message }), {
-          status: error.status, headers: { 'Content-Type': 'application/json' }
+          status: error.status,
+          headers: { 'Content-Type': 'application/json' },
         });
       }
       return new Response('Internal Server Error', { status: 500 });
@@ -26,7 +32,10 @@ export default {
 ## CORS
 
 ```typescript
-const corsHeaders = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS' };
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+};
 if (request.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
 ```
 
@@ -55,7 +64,7 @@ const userSchema = z.object({
 async function handleCreateUser(request: Request) {
   try {
     const body = await request.json();
-    const validated = userSchema.parse(body);  // Throws on invalid data
+    const validated = userSchema.parse(body); // Throws on invalid data
     return new Response(JSON.stringify({ id: 1, ...validated }), {
       status: 201,
       headers: { 'Content-Type': 'application/json' },
@@ -89,19 +98,26 @@ const stream = new ReadableStream({
   async start(controller) {
     for (let i = 0; i < 1000; i++) {
       controller.enqueue(new TextEncoder().encode(`Item ${i}\n`));
-      if (i % 100 === 0) await new Promise(r => setTimeout(r, 0));
+      if (i % 100 === 0) await new Promise((r) => setTimeout(r, 0));
     }
     controller.close();
-  }
+  },
 });
 ```
 
 ## Transform Streams
 
 ```typescript
-response.body.pipeThrough(new TextDecoderStream()).pipeThrough(
-  new TransformStream({ transform(chunk, c) { c.enqueue(chunk.toUpperCase()); } })
-).pipeThrough(new TextEncoderStream());
+response.body
+  .pipeThrough(new TextDecoderStream())
+  .pipeThrough(
+    new TransformStream({
+      transform(chunk, c) {
+        c.enqueue(chunk.toUpperCase());
+      },
+    }),
+  )
+  .pipeThrough(new TextEncoderStream());
 ```
 
 ## Testing
@@ -134,9 +150,12 @@ npx wrangler rollback
 ```typescript
 const start = Date.now();
 const response = await handleRequest(request, env);
-ctx.waitUntil(env.ANALYTICS.writeDataPoint({
-  doubles: [Date.now() - start], blobs: [request.url, String(response.status)]
-}));
+ctx.waitUntil(
+  env.ANALYTICS.writeDataPoint({
+    doubles: [Date.now() - start],
+    blobs: [request.url, String(response.status)],
+  }),
+);
 ```
 
 ## Security & Rate Limiting
@@ -167,7 +186,10 @@ try {
     parts.push(await upload.uploadPart(i + 1, chunks[i]));
   }
   await upload.complete(parts);
-} catch (err) { await upload.abort(); throw err; }
+} catch (err) {
+  await upload.abort();
+  throw err;
+}
 ```
 
 Parallel uploads, resume on failure, handle files > 5GB
@@ -179,8 +201,8 @@ import { WorkflowEntrypoint, WorkflowStep, WorkflowEvent } from 'cloudflare:work
 
 export class MyWorkflow extends WorkflowEntrypoint {
   async run(event: WorkflowEvent<{ userId: string }>, step: WorkflowStep) {
-    const user = await step.do('fetch-user', async () => 
-      fetch(`/api/users/${event.payload.userId}`).then(r => r.json())
+    const user = await step.do('fetch-user', async () =>
+      fetch(`/api/users/${event.payload.userId}`).then((r) => r.json()),
     );
     await step.sleep('wait', '1 hour');
     await step.do('notify', async () => sendEmail(user.email));

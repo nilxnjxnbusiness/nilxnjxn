@@ -7,16 +7,16 @@ Fetch `docs/resumable-streaming.md` and `docs/client-sdk.md` from `https://githu
 ## Basic Chat Agent
 
 ```typescript
-import { AIChatAgent } from "@cloudflare/ai-chat";
-import { streamText, convertToModelMessages } from "ai";
-import { openai } from "@ai-sdk/openai";
+import { AIChatAgent } from '@cloudflare/ai-chat';
+import { streamText, convertToModelMessages } from 'ai';
+import { openai } from '@ai-sdk/openai';
 
 export class Chat extends AIChatAgent<Env> {
   async onChatMessage(onFinish) {
     const result = streamText({
-      model: openai("gpt-4o"),
+      model: openai('gpt-4o'),
       messages: await convertToModelMessages(this.messages),
-      onFinish
+      onFinish,
     });
     return result.toUIMessageStreamResponse();
   }
@@ -29,10 +29,10 @@ export class Chat extends AIChatAgent<Env> {
 export class Chat extends AIChatAgent<Env> {
   async onChatMessage(onFinish) {
     const result = streamText({
-      model: openai("gpt-4o"),
-      system: "You are a helpful assistant specializing in...",
+      model: openai('gpt-4o'),
+      system: 'You are a helpful assistant specializing in...',
       messages: await convertToModelMessages(this.messages),
-      onFinish
+      onFinish,
     });
     return result.toUIMessageStreamResponse();
   }
@@ -42,24 +42,24 @@ export class Chat extends AIChatAgent<Env> {
 ## With Tools
 
 ```typescript
-import { tool } from "ai";
-import { z } from "zod";
+import { tool } from 'ai';
+import { z } from 'zod';
 
 const tools = {
   getWeather: tool({
-    description: "Get weather for a location",
+    description: 'Get weather for a location',
     parameters: z.object({ location: z.string() }),
-    execute: async ({ location }) => `Weather in ${location}: 72°F, sunny`
-  })
+    execute: async ({ location }) => `Weather in ${location}: 72°F, sunny`,
+  }),
 };
 
 export class Chat extends AIChatAgent<Env> {
   async onChatMessage(onFinish) {
     const result = streamText({
-      model: openai("gpt-4o"),
+      model: openai('gpt-4o'),
       messages: await convertToModelMessages(this.messages),
       tools,
-      onFinish
+      onFinish,
     });
     return result.toUIMessageStreamResponse();
   }
@@ -71,19 +71,19 @@ export class Chat extends AIChatAgent<Env> {
 For more control, use `createUIMessageStream`:
 
 ```typescript
-import { createUIMessageStream, createUIMessageStreamResponse } from "ai";
+import { createUIMessageStream, createUIMessageStreamResponse } from 'ai';
 
 export class Chat extends AIChatAgent<Env> {
   async onChatMessage(onFinish) {
     const stream = createUIMessageStream({
       execute: async ({ writer }) => {
         const result = streamText({
-          model: openai("gpt-4o"),
+          model: openai('gpt-4o'),
           messages: await convertToModelMessages(this.messages),
-          onFinish
+          onFinish,
         });
         writer.merge(result.toUIMessageStream());
-      }
+      },
     });
     return createUIMessageStreamResponse({ stream });
   }
@@ -107,22 +107,16 @@ const { messages } = useAgentChat({ agent, resume: false });
 ## React Client
 
 ```tsx
-import { useAgent } from "agents/react";
-import { useAgentChat } from "@cloudflare/ai-chat/react";
+import { useAgent } from 'agents/react';
+import { useAgentChat } from '@cloudflare/ai-chat/react';
 
 function ChatUI() {
   const agent = useAgent({
-    agent: "Chat",
-    name: "my-chat-session"
+    agent: 'Chat',
+    name: 'my-chat-session',
   });
 
-  const { 
-    messages, 
-    input, 
-    handleInputChange, 
-    handleSubmit, 
-    status 
-  } = useAgentChat({ agent });
+  const { messages, input, handleInputChange, handleSubmit, status } = useAgentChat({ agent });
 
   return (
     <div>
@@ -131,13 +125,9 @@ function ChatUI() {
           <strong>{m.role}:</strong> {m.content}
         </div>
       ))}
-      
+
       <form onSubmit={handleSubmit}>
-        <input 
-          value={input} 
-          onChange={handleInputChange}
-          disabled={status === "streaming"}
-        />
+        <input value={input} onChange={handleInputChange} disabled={status === 'streaming'} />
         <button type="submit">Send</button>
       </form>
     </div>
@@ -150,7 +140,7 @@ function ChatUI() {
 For non-chat streaming, use `@callable({ streaming: true })`:
 
 ```typescript
-import { Agent, callable, StreamingResponse } from "agents";
+import { Agent, callable, StreamingResponse } from 'agents';
 
 export class MyAgent extends Agent<Env> {
   @callable({ streaming: true })
@@ -170,9 +160,9 @@ Client receives streamed messages via WebSocket RPC.
 
 `useAgentChat` status:
 
-| Status | Meaning |
-|--------|---------|
-| `ready` | Idle, ready for input |
-| `streaming` | Response streaming |
+| Status      | Meaning               |
+| ----------- | --------------------- |
+| `ready`     | Idle, ready for input |
+| `streaming` | Response streaming    |
 | `submitted` | Request sent, waiting |
-| `error` | Error occurred |
+| `error`     | Error occurred        |

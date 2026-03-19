@@ -1,8 +1,8 @@
-import { Metadata } from "next";
-import { SuccessClient } from "@/components/player/SuccessClient";
+import { Metadata } from 'next';
+import { SuccessClient } from '@/components/player/SuccessClient';
 
 export const metadata: Metadata = {
-  title: "Success | NILXNJXN",
+  title: 'Success | NILXNJXN',
   robots: { index: false, follow: false },
 };
 

@@ -7,7 +7,7 @@ interface AudioState {
   volume: number;
   duration: number;
   currentTime: number;
-  
+
   // Actions
   playTrack: (track: Track) => void;
   setTrack: (track: Track) => void;

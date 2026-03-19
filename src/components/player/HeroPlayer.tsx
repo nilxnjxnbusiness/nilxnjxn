@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useRef, useLayoutEffect } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { motion, AnimatePresence } from "framer-motion";
-import { PlayIcon, PauseIcon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { Track } from "@/lib/data";
-import { useAudioStore } from "@/store/audioStore";
-import { Magnetic } from "@/components/ui/Magnetic";
-import { Button } from "@/components/ui/button";
+import { useRef, useLayoutEffect } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { motion, AnimatePresence } from 'framer-motion';
+import { PlayIcon, PauseIcon } from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { Track } from '@/lib/data';
+import { useAudioStore } from '@/store/audioStore';
+import { Magnetic } from '@/components/ui/Magnetic';
+import { Button } from '@/components/ui/button';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -33,24 +33,24 @@ export function HeroPlayer({ track, onPlay, hasInteracted }: HeroPlayerProps) {
       // Parallax
       gsap.to(bgRef.current, {
         yPercent: 20,
-        ease: "none",
+        ease: 'none',
         scrollTrigger: {
           trigger: containerRef.current,
-          start: "top top",
-          end: "bottom top",
+          start: 'top top',
+          end: 'bottom top',
           scrub: true,
         },
       });
 
       // CTA Reveal
       if (hasInteracted) {
-        gsap.from(".cta-reveal", {
+        gsap.from('.cta-reveal', {
           y: 40,
           opacity: 0,
           scale: 0.8,
           duration: 1.2,
-          ease: "expo.out",
-          delay: 0.5
+          ease: 'expo.out',
+          delay: 0.5,
         });
       }
     }, containerRef);
@@ -68,15 +68,18 @@ export function HeroPlayer({ track, onPlay, hasInteracted }: HeroPlayerProps) {
   };
 
   return (
-    <section ref={containerRef} className="relative h-screen flex flex-col items-center justify-center overflow-hidden">
+    <section
+      ref={containerRef}
+      className="relative flex h-screen flex-col items-center justify-center overflow-hidden"
+    >
       {/* Background Visuals */}
-      <div 
+      <div
         ref={bgRef}
         className="absolute inset-[-10%] z-0 bg-cover bg-center opacity-60"
         style={{ backgroundImage: `url('/extra/250519DSC_0025.webp')`, height: '120%' }}
       />
-      <div className="absolute inset-0 z-10 bg-linear-to-b from-background via-transparent to-background/90" />
-      
+      <div className="from-background to-background/90 absolute inset-0 z-10 bg-linear-to-b via-transparent" />
+
       {/* Centered Play Core */}
       <div className="relative z-20 flex flex-col items-center justify-center gap-12 pt-16 md:pt-20">
         <AnimatePresence mode="wait">
@@ -86,9 +89,9 @@ export function HeroPlayer({ track, onPlay, hasInteracted }: HeroPlayerProps) {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.8 }}
-              className="text-center space-y-4"
+              className="space-y-4 text-center"
             >
-              <h2 className="text-white/60 text-[10px] tracking-[0.6em] uppercase font-functional font-bold">
+              <h2 className="font-functional text-[10px] font-bold tracking-[0.6em] text-white/60 uppercase">
                 Enter the frequency
               </h2>
             </motion.div>
@@ -98,17 +101,17 @@ export function HeroPlayer({ track, onPlay, hasInteracted }: HeroPlayerProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.2 }}
-              className="space-y-4 text-center px-4"
+              className="space-y-4 px-4 text-center"
             >
-              <h1 className="text-6xl sm:text-7xl md:text-[10rem] lg:text-[12rem] font-expressive text-white tracking-tighter mix-blend-difference drop-shadow-2xl leading-[0.8] wrap-break-word">
+              <h1 className="font-expressive text-6xl leading-[0.8] tracking-tighter wrap-break-word text-white mix-blend-difference drop-shadow-2xl sm:text-7xl md:text-[10rem] lg:text-[12rem]">
                 NILXNJXN
               </h1>
               <div className="overflow-hidden">
-                 <motion.p 
+                <motion.p
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.8, delay: 0.4 }}
-                  className="text-white/40 font-functional text-[8px] md:text-[10px] uppercase tracking-[0.4em] md:tracking-[0.6em] font-medium"
+                  className="font-functional text-[8px] font-medium tracking-[0.4em] text-white/40 uppercase md:text-[10px] md:tracking-[0.6em]"
                 >
                   {track.title}
                 </motion.p>
@@ -118,26 +121,30 @@ export function HeroPlayer({ track, onPlay, hasInteracted }: HeroPlayerProps) {
         </AnimatePresence>
 
         <motion.div
-          animate={!hasInteracted ? {
-            scale: [1, 1.1, 1],
-            boxShadow: [
-              "0 0 0px rgba(255,255,255,0)",
-              "0 0 40px rgba(34,211,238,0.1)",
-              "0 0 0px rgba(255,255,255,0)"
-            ]
-          } : {}}
-          transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+          animate={
+            !hasInteracted
+              ? {
+                  scale: [1, 1.1, 1],
+                  boxShadow: [
+                    '0 0 0px rgba(255,255,255,0)',
+                    '0 0 40px rgba(34,211,238,0.1)',
+                    '0 0 0px rgba(255,255,255,0)',
+                  ],
+                }
+              : {}
+          }
+          transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
           className="relative"
         >
           <Magnetic strength={0.4}>
             <button
               onClick={handlePlay}
-              className="w-28 h-28 sm:w-32 sm:h-32 md:w-48 md:h-48 bg-white text-black rounded-full hover:scale-105 transition-all flex items-center justify-center group shadow-2xl relative z-30 overflow-hidden"
-              aria-label={isPlaying && isCurrentTrack ? "Pause Track" : "Play Track"}
+              className="group relative z-30 flex h-28 w-28 items-center justify-center overflow-hidden rounded-full bg-white text-black shadow-2xl transition-all hover:scale-105 sm:h-32 sm:w-32 md:h-48 md:w-48"
+              aria-label={isPlaying && isCurrentTrack ? 'Pause Track' : 'Play Track'}
             >
               {/* Internal Glow Effect */}
-              <div className="absolute inset-0 bg-accent/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-              
+              <div className="bg-accent/10 absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100" />
+
               <AnimatePresence mode="wait">
                 {isPlaying && isCurrentTrack ? (
                   <motion.div
@@ -146,7 +153,11 @@ export function HeroPlayer({ track, onPlay, hasInteracted }: HeroPlayerProps) {
                     animate={{ opacity: 1, scale: 1, rotate: 0 }}
                     exit={{ opacity: 0, scale: 0.5, rotate: 45 }}
                   >
-                    <HugeiconsIcon icon={PauseIcon} className="w-10 h-10 md:w-14 md:h-14" color="currentColor" />
+                    <HugeiconsIcon
+                      icon={PauseIcon}
+                      className="h-10 w-10 md:h-14 md:w-14"
+                      color="currentColor"
+                    />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -155,7 +166,11 @@ export function HeroPlayer({ track, onPlay, hasInteracted }: HeroPlayerProps) {
                     animate={{ opacity: 1, scale: 1, rotate: 0 }}
                     exit={{ opacity: 0, scale: 0.5, rotate: -45 }}
                   >
-                    <HugeiconsIcon icon={PlayIcon} className="w-10 h-10 md:w-14 md:h-14 ml-2 md:ml-3" color="currentColor" />
+                    <HugeiconsIcon
+                      icon={PlayIcon}
+                      className="ml-2 h-10 w-10 md:ml-3 md:h-14 md:w-14"
+                      color="currentColor"
+                    />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -164,21 +179,21 @@ export function HeroPlayer({ track, onPlay, hasInteracted }: HeroPlayerProps) {
         </motion.div>
 
         {hasInteracted && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 1 }}
-            className="pt-4 px-6 w-full max-w-[320px] md:max-w-none"
+            className="w-full max-w-[320px] px-6 pt-4 md:max-w-none"
           >
-              <Magnetic strength={0.2}>
-                <Button 
-                 variant="outline"
-                 size="lg" 
-                 className="cta-reveal w-full md:w-auto rounded-full border-white/20 bg-transparent text-white hover:bg-white hover:text-black font-functional px-8 py-6 text-sm md:text-base tracking-widest uppercase transition-all shadow-[0_0_30px_rgba(255,255,255,0.1)]"
-               >
-                 Get Access — <span className="text-accent ml-2">{track.price}</span>
-               </Button>
-              </Magnetic>
+            <Magnetic strength={0.2}>
+              <Button
+                variant="outline"
+                size="lg"
+                className="cta-reveal font-functional w-full rounded-full border-white/20 bg-transparent px-8 py-6 text-sm tracking-widest text-white uppercase shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all hover:bg-white hover:text-black md:w-auto md:text-base"
+              >
+                Get Access — <span className="text-accent ml-2">{track.price}</span>
+              </Button>
+            </Magnetic>
           </motion.div>
         )}
       </div>
@@ -190,14 +205,20 @@ export function HeroPlayer({ track, onPlay, hasInteracted }: HeroPlayerProps) {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}
-            className="absolute bottom-12 left-6 right-6 md:left-12 flex flex-col md:flex-row items-center md:items-center gap-4 md:gap-8"
+            className="absolute right-6 bottom-12 left-6 flex flex-col items-center gap-4 md:left-12 md:flex-row md:items-center md:gap-8"
           >
-            <div className="flex flex-col items-center md:items-start text-center md:text-left">
-              <span className="text-[9px] md:text-[10px] text-accent uppercase tracking-[0.4em] font-bold">Now Playing</span>
-              <span className="text-white font-expressive text-2xl md:text-3xl tracking-wide mt-1">{track.title}</span>
+            <div className="flex flex-col items-center text-center md:items-start md:text-left">
+              <span className="text-accent text-[9px] font-bold tracking-[0.4em] uppercase md:text-[10px]">
+                Now Playing
+              </span>
+              <span className="font-expressive mt-1 text-2xl tracking-wide text-white md:text-3xl">
+                {track.title}
+              </span>
             </div>
-            <div className="hidden md:block h-px w-16 bg-white/10" />
-            <span className="text-white/40 font-functional text-[9px] md:text-[10px] tracking-[0.3em] uppercase">Lossless Frequency</span>
+            <div className="hidden h-px w-16 bg-white/10 md:block" />
+            <span className="font-functional text-[9px] tracking-[0.3em] text-white/40 uppercase md:text-[10px]">
+              Lossless Frequency
+            </span>
           </motion.div>
         )}
       </AnimatePresence>

@@ -13,7 +13,8 @@ export const onRequestGet: PagesFunction<Env> = async ({ env, params }) => {
 export const onRequestPut: PagesFunction<Env> = async ({ env, params, request }) => {
   const body = await request.json();
   await env.DB.prepare('UPDATE todos SET title = ?, completed = ? WHERE id = ?')
-    .bind(body.title, body.completed, params.id).run();
+    .bind(body.title, body.completed, params.id)
+    .run();
   return Response.json({ success: true });
 };
 // Also: onRequestDelete, onRequestPost
@@ -29,7 +30,7 @@ const auth: PagesFunction<Env> = async (context) => {
   if (!authHeader?.startsWith('Bearer ')) {
     return new Response('Unauthorized', { status: 401 });
   }
-  
+
   try {
     const payload = await verifyJWT(authHeader.substring(7), context.env.JWT_SECRET);
     context.data.user = payload;
@@ -48,12 +49,12 @@ export const onRequest = [auth];
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
 
 export const onRequest: PagesFunction = async (context) => {
   if (context.request.method === 'OPTIONS') {
-    return new Response(null, {headers: corsHeaders});
+    return new Response(null, { headers: corsHeaders });
   }
   const response = await context.next();
   Object.entries(corsHeaders).forEach(([k, v]) => response.headers.set(k, v));
@@ -67,7 +68,7 @@ export const onRequest: PagesFunction = async (context) => {
 // functions/api/contact.ts
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const formData = await request.formData();
-  await env.QUEUE.send({name: formData.get('name'), email: formData.get('email')});
+  await env.QUEUE.send({ name: formData.get('name'), email: formData.get('email') });
   return new Response('<h1>Thanks!</h1>', { headers: { 'Content-Type': 'text/html' } });
 };
 ```
@@ -77,9 +78,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 ```typescript
 export const onRequestPost: PagesFunction = async ({ request, waitUntil }) => {
   const data = await request.json();
-  waitUntil(fetch('https://api.example.com/webhook', {
-    method: 'POST', body: JSON.stringify(data)
-  }));
+  waitUntil(
+    fetch('https://api.example.com/webhook', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+  );
   return Response.json({ queued: true });
 };
 ```
@@ -96,8 +100,9 @@ const errorHandler: PagesFunction = async (context) => {
     if (context.request.url.includes('/api/')) {
       return Response.json({ error: error.message }, { status: 500 });
     }
-    return new Response(`<h1>Error</h1><p>${error.message}</p>`, { 
-      status: 500, headers: { 'Content-Type': 'text/html' } 
+    return new Response(`<h1>Error</h1><p>${error.message}</p>`, {
+      status: 500,
+      headers: { 'Content-Type': 'text/html' },
     });
   }
 };
@@ -112,10 +117,10 @@ export const onRequestGet: PagesFunction<Env> = async ({ env, request }) => {
   const cacheKey = `data:${new URL(request.url).pathname}`;
   const cached = await env.KV.get(cacheKey, 'json');
   if (cached) return Response.json(cached, { headers: { 'X-Cache': 'HIT' } });
-  
+
   const data = await env.DB.prepare('SELECT * FROM data').first();
-  await env.KV.put(cacheKey, JSON.stringify(data), {expirationTtl: 3600});
-  return Response.json(data, {headers: {'X-Cache': 'MISS'}});
+  await env.KV.put(cacheKey, JSON.stringify(data), { expirationTtl: 3600 });
+  return Response.json(data, { headers: { 'X-Cache': 'MISS' } });
 };
 ```
 
@@ -128,12 +133,14 @@ Enable Smart Placement for apps with D1 or centralized data sources:
 {
   "name": "global-app",
   "placement": {
-    "mode": "smart"
+    "mode": "smart",
   },
-  "d1_databases": [{
-    "binding": "DB",
-    "database_id": "your-db-id"
-  }]
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_id": "your-db-id",
+    },
+  ],
 }
 ```
 
@@ -159,6 +166,7 @@ npm create cloudflare@latest my-app -- --framework=svelte
 ```
 
 ### SvelteKit
+
 ```typescript
 // src/routes/+page.server.ts
 export const load = async ({ platform }) => {
@@ -168,6 +176,7 @@ export const load = async ({ platform }) => {
 ```
 
 ### Astro
+
 ```astro
 ---
 const { DB } = Astro.locals.runtime.env;
@@ -177,6 +186,7 @@ const todos = await DB.prepare('SELECT * FROM todos').all();
 ```
 
 ### Nuxt
+
 ```typescript
 // server/api/todos.get.ts
 export default defineEventHandler(async (event) => {
@@ -186,6 +196,7 @@ export default defineEventHandler(async (event) => {
 ```
 
 **⚠️ Framework Status** (2026):
+
 - ✅ **Supported**: SvelteKit, Astro, Nuxt, Qwik, Solid Start
 - ❌ **Deprecated**: Next.js (`@cloudflare/next-on-pages`), Remix (`@remix-run/cloudflare-pages`)
 

@@ -8,7 +8,7 @@ export default {
     const event = { user_id: '...', event_type: 'page_view', timestamp: new Date().toISOString() };
     ctx.waitUntil(env.STREAM.send([event])); // Don't block response
     return new Response('OK');
-  }
+  },
 };
 ```
 
@@ -20,7 +20,7 @@ import { z } from 'zod';
 const EventSchema = z.object({
   user_id: z.string(),
   event_type: z.enum(['purchase', 'view']),
-  amount: z.number().positive().optional()
+  amount: z.number().positive().optional(),
 });
 
 const validated = EventSchema.parse(rawEvent); // Throws on invalid
@@ -53,24 +53,24 @@ FROM my_stream
 
 ```typescript
 await Promise.all([
-  env.ANALYTICS_STREAM.send([event]),  // Long-term storage
-  env.PROCESS_QUEUE.send(event)        // Immediate processing
+  env.ANALYTICS_STREAM.send([event]), // Long-term storage
+  env.PROCESS_QUEUE.send(event), // Immediate processing
 ]);
 ```
 
-| Need | Use |
-|------|-----|
-| Long-term storage, SQL queries | Pipelines |
-| Immediate processing, retries | Queues |
-| Both | Fan-out pattern |
+| Need                           | Use             |
+| ------------------------------ | --------------- |
+| Long-term storage, SQL queries | Pipelines       |
+| Immediate processing, retries  | Queues          |
+| Both                           | Fan-out pattern |
 
 ## Performance Tuning
 
-| Goal | Config |
-|------|--------|
-| Low latency | `--roll-interval 10` |
-| Query performance | `--roll-interval 300 --roll-size 100` |
-| Cost optimal | `--compression zstd --roll-interval 300` |
+| Goal              | Config                                   |
+| ----------------- | ---------------------------------------- |
+| Low latency       | `--roll-interval 10`                     |
+| Query performance | `--roll-interval 300 --roll-size 100`    |
+| Cost optimal      | `--compression zstd --roll-interval 300` |
 
 ## Schema Evolution
 

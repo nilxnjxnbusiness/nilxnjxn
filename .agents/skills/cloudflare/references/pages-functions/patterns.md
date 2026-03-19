@@ -7,13 +7,15 @@ Non-blocking tasks after response sent (analytics, cleanup, webhooks):
 ```typescript
 export async function onRequest(ctx: EventContext<Env>) {
   const res = Response.json({ success: true });
-  
+
   ctx.waitUntil(ctx.env.KV.put('last-visit', new Date().toISOString()));
-  ctx.waitUntil(Promise.all([
-    ctx.env.ANALYTICS.writeDataPoint({ event: 'view' }),
-    fetch('https://webhook.site/...', { method: 'POST' })
-  ]));
-  
+  ctx.waitUntil(
+    Promise.all([
+      ctx.env.ANALYTICS.writeDataPoint({ event: 'view' }),
+      fetch('https://webhook.site/...', { method: 'POST' }),
+    ]),
+  );
+
   return res; // Returned immediately
 }
 ```
@@ -23,8 +25,11 @@ export async function onRequest(ctx: EventContext<Env>) {
 ```typescript
 // functions/_middleware.js (global) or functions/users/_middleware.js (scoped)
 export async function onRequest(ctx) {
-  try { return await ctx.next(); } 
-  catch (err) { return new Response(err.message, { status: 500 }); }
+  try {
+    return await ctx.next();
+  } catch (err) {
+    return new Response(err.message, { status: 500 });
+  }
 }
 
 // Chained: export const onRequest = [errorHandler, auth, logger];
@@ -45,7 +50,9 @@ async function auth(ctx: EventContext<Env>) {
 ```typescript
 // CORS middleware
 const cors = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET, POST' };
-export async function onRequestOptions() { return new Response(null, { headers: cors }); }
+export async function onRequestOptions() {
+  return new Response(null, { headers: cors });
+}
 export async function onRequest(ctx) {
   const res = await ctx.next();
   Object.entries(cors).forEach(([k, v]) => res.headers.set(k, v));
@@ -55,7 +62,7 @@ export async function onRequest(ctx) {
 // Rate limiting (KV-based)
 async function rateLimit(ctx: EventContext<Env>) {
   const ip = ctx.request.headers.get('CF-Connecting-IP') || 'unknown';
-  const count = parseInt(await ctx.env.KV.get(`rate:${ip}`) || '0');
+  const count = parseInt((await ctx.env.KV.get(`rate:${ip}`)) || '0');
   if (count >= 100) return new Response('Rate limited', { status: 429 });
   await ctx.env.KV.put(`rate:${ip}`, (count + 1).toString(), { expirationTtl: 3600 });
   return ctx.next();
@@ -99,6 +106,7 @@ export async function onRequest(ctx) {
 ## Testing
 
 **Unit tests** (Vitest + cloudflare:test):
+
 ```typescript
 import { env } from 'cloudflare:test';
 import { it, expect } from 'vitest';
@@ -114,12 +122,15 @@ it('returns JSON', async () => {
 
 **Integration:** `wrangler pages dev` + Playwright/Cypress
 
-## Advanced Mode (_worker.js)
+## Advanced Mode (\_worker.js)
 
 Use `_worker.js` for complex routing (replaces `/functions`):
 
 ```typescript
-interface Env { ASSETS: Fetcher; KV: KVNamespace; }
+interface Env {
+  ASSETS: Fetcher;
+  KV: KVNamespace;
+}
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -128,7 +139,7 @@ export default {
       return Response.json({ data: await env.KV.get('key') });
     }
     return env.ASSETS.fetch(request); // Static files
-  }
+  },
 } satisfies ExportedHandler<Env>;
 ```
 

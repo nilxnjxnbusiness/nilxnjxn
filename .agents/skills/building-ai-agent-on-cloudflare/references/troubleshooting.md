@@ -11,20 +11,22 @@ Common issues and solutions for Cloudflare Agents.
 **Causes & Solutions:**
 
 1. **Worker not deployed**
+
    ```bash
    wrangler deployments list
    wrangler deploy  # If not deployed
    ```
 
 2. **Wrong URL path**
+
    ```javascript
    // Ensure your routing handles the agent path
    // Client:
-   new WebSocket("wss://my-worker.workers.dev/agent/user123");
+   new WebSocket('wss://my-worker.workers.dev/agent/user123');
 
    // Worker must route to agent:
-   if (url.pathname.startsWith("/agent/")) {
-     const id = url.pathname.split("/")[2];
+   if (url.pathname.startsWith('/agent/')) {
+     const id = url.pathname.split('/')[2];
      return env.AGENT.get(env.AGENT.idFromName(id)).fetch(request);
    }
    ```
@@ -35,11 +37,13 @@ Common issues and solutions for Cloudflare Agents.
 ### "Connection closed unexpectedly"
 
 1. **Agent threw an error**
+
    ```bash
    wrangler tail  # Check for exceptions
    ```
 
 2. **Message handler crashed**
+
    ```typescript
    async onMessage(connection: Connection, message: string) {
      try {
@@ -61,6 +65,7 @@ Common issues and solutions for Cloudflare Agents.
 **Causes:**
 
 1. **Didn't call `setState()`**
+
    ```typescript
    // Wrong - direct mutation doesn't persist
    this.state.messages.push(newMessage);
@@ -83,6 +88,7 @@ Common issues and solutions for Cloudflare Agents.
 `setState()` automatically syncs to all connected clients via `onStateUpdate()`. If sync isn't working:
 
 1. **Check `onStateUpdate` is implemented**
+
    ```typescript
    onStateUpdate(state: State, source: string) {
      // This fires when state changes from any source
@@ -91,14 +97,15 @@ Common issues and solutions for Cloudflare Agents.
    ```
 
 2. **Client not listening for state updates**
+
    ```typescript
    // React hook handles this automatically
-   const { state } = useAgent({ agent: "my-agent", name: id });
+   const { state } = useAgent({ agent: 'my-agent', name: id });
 
    // Manual WebSocket - listen for state messages
    ws.onmessage = (event) => {
      const data = JSON.parse(event.data);
-     if (data.type === "state_update") {
+     if (data.type === 'state_update') {
        updateLocalState(data.state);
      }
    };
@@ -111,13 +118,13 @@ State is serialized as JSON. Keep it small:
 ```typescript
 // Bad - storing everything in state
 interface State {
-  allMessages: Message[];  // Could be thousands
+  allMessages: Message[]; // Could be thousands
   allDocuments: Document[];
 }
 
 // Good - state for hot data, SQL for cold
 interface State {
-  recentMessages: Message[];  // Last 50 only
+  recentMessages: Message[]; // Last 50 only
   currentDocument: Document | null;
 }
 
@@ -162,14 +169,15 @@ await this.sql`SELECT * FROM users WHERE id = ${userId}`;
 3. **Query conditions don't match**
 
 Debug:
+
 ```typescript
 const tables = await this.sql`
   SELECT name FROM sqlite_master WHERE type='table'
 `;
-console.log("Tables:", tables);
+console.log('Tables:', tables);
 
 const count = await this.sql`SELECT COUNT(*) as count FROM messages`;
-console.log("Message count:", count);
+console.log('Message count:', count);
 ```
 
 ## Scheduled Task Issues
@@ -177,6 +185,7 @@ console.log("Message count:", count);
 ### "Task never fires"
 
 1. **Method name mismatch**
+
    ```typescript
    // Schedule references method that must exist
    await this.schedule(60, "sendReminder", { ... });
@@ -188,18 +197,19 @@ console.log("Message count:", count);
    ```
 
 2. **Cron syntax error**
+
    ```typescript
    // Invalid cron
-   await this.schedule("every 5 minutes", "task", {});  // Wrong
+   await this.schedule('every 5 minutes', 'task', {}); // Wrong
 
    // Valid cron
-   await this.schedule("*/5 * * * *", "task", {});  // Every 5 minutes
+   await this.schedule('*/5 * * * *', 'task', {}); // Every 5 minutes
    ```
 
 3. **Task was cancelled**
    ```typescript
    const schedules = await this.getSchedules();
-   console.log("Active schedules:", schedules);
+   console.log('Active schedules:', schedules);
    ```
 
 ### "Task fires multiple times"
@@ -310,26 +320,27 @@ for await (const chunk of stream) {
 ```typescript
 export class MyAgent extends Agent<Env, State> {
   async onStart() {
-    console.log("Agent starting, state:", JSON.stringify(this.state));
+    console.log('Agent starting, state:', JSON.stringify(this.state));
   }
 
   async onConnect(connection: Connection) {
-    console.log("Client connected:", connection.id);
+    console.log('Client connected:', connection.id);
   }
 
   async onMessage(connection: Connection, message: string) {
-    console.log("Received message:", message);
+    console.log('Received message:', message);
     // ... handle
-    console.log("State after:", JSON.stringify(this.state));
+    console.log('State after:', JSON.stringify(this.state));
   }
 
   async onClose(connection: Connection) {
-    console.log("Client disconnected:", connection.id);
+    console.log('Client disconnected:', connection.id);
   }
 }
 ```
 
 View logs:
+
 ```bash
 wrangler tail --format pretty
 ```

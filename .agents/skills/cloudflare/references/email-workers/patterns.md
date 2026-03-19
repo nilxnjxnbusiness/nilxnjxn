@@ -11,7 +11,7 @@ export default {
     const email = await PostalMime.parse(buffer);
     console.log(email.from, email.subject, email.text, email.attachments.length);
     await message.forward('inbox@example.com');
-  }
+  },
 };
 ```
 
@@ -19,7 +19,7 @@ export default {
 
 ```typescript
 // Allowlist from KV
-const allowList = await env.ALLOWED_SENDERS.get('list', 'json') || [];
+const allowList = (await env.ALLOWED_SENDERS.get('list', 'json')) || [];
 if (!allowList.includes(message.from)) {
   message.setReject('Not allowed');
   return;
@@ -52,7 +52,7 @@ await message.reply(new EmailMessage('support@example.com', message.from, msg.as
 
 ```typescript
 const rateKey = `rate:${message.from}`;
-if (!await env.RATE_LIMIT.get(rateKey)) {
+if (!(await env.RATE_LIMIT.get(rateKey))) {
   // Send reply...
   ctx.waitUntil(env.RATE_LIMIT.put(rateKey, '1', { expirationTtl: 3600 }));
 }
@@ -80,9 +80,15 @@ config?.forwardTo ? await message.forward(config.forwardTo) : message.setReject(
 
 ```typescript
 // Archive to KV
-ctx.waitUntil(env.ARCHIVE.put(`email:${Date.now()}`, JSON.stringify({
-  from: message.from, subject: email.subject
-})));
+ctx.waitUntil(
+  env.ARCHIVE.put(
+    `email:${Date.now()}`,
+    JSON.stringify({
+      from: message.from,
+      subject: email.subject,
+    }),
+  ),
+);
 
 // Attachments to R2
 for (const att of email.attachments) {
@@ -96,7 +102,7 @@ for (const att of email.attachments) {
 ctx.waitUntil(
   fetch(env.WEBHOOK_URL, {
     method: 'POST',
-    body: JSON.stringify({ from: message.from, subject: message.headers.get('Subject') })
-  }).catch(err => console.error(err))
+    body: JSON.stringify({ from: message.from, subject: message.headers.get('Subject') }),
+  }).catch((err) => console.error(err)),
 );
 ```

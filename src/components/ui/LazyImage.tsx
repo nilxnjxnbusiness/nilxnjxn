@@ -1,8 +1,9 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { cn } from "@/lib/utils";
-import { Skeleton } from "./Skeleton";
+import { useState, useEffect } from 'react';
+import { cn } from '@/lib/utils';
+import { Skeleton } from './Skeleton';
+import Image from 'next/image';
 
 interface LazyImageProps {
   src: string;
@@ -11,35 +12,42 @@ interface LazyImageProps {
   aspectRatio?: string;
 }
 
-export function LazyImage({ src, alt, className, aspectRatio = "aspect-square" }: LazyImageProps) {
+export function LazyImage({ src, alt, className, aspectRatio = 'aspect-square' }: LazyImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    const img = new Image();
-    img.src = src;
-    img.onload = () => setIsLoaded(true);
-    img.onerror = () => setError(true);
+    // We already have onLoad on the Image component below,
+    // but we use this effect to ensure states are reset when src changes.
+    // Resetting in cleanup avoids the "cascading renders" lint error
+    // because it doesn't happen during the synchronous mount/update phase of the effect.
+    return () => {
+      setIsLoaded(false);
+      setError(false);
+    };
   }, [src]);
 
   return (
-    <div className={cn("relative overflow-hidden", aspectRatio, className)}>
-      {!isLoaded && !error && (
-        <Skeleton className="absolute inset-0 z-10" />
-      )}
-      
-      <img
+    <div className={cn('relative overflow-hidden', aspectRatio, className)}>
+      {!isLoaded && !error && <Skeleton className="absolute inset-0 z-10" />}
+
+      <Image
         src={src}
         alt={alt}
+        fill
         className={cn(
-          "w-full h-full object-cover transition-all duration-1000 ease-out",
-          isLoaded ? "opacity-100 scale-100 blur-0" : "opacity-0 scale-110 blur-xl"
+          'object-cover transition-all duration-1000 ease-out',
+          isLoaded
+            ? 'blur-0 scale-100 opacity-100 grayscale-0'
+            : 'scale-110 opacity-0 blur-xl grayscale-100',
         )}
+        onLoad={() => setIsLoaded(true)}
+        onError={() => setError(true)}
         loading="lazy"
       />
 
       {error && (
-        <div className="absolute inset-0 bg-white/5 flex items-center justify-center text-[10px] text-white/20 uppercase tracking-widest font-functional">
+        <div className="font-functional absolute inset-0 flex items-center justify-center bg-white/5 text-[10px] tracking-widest text-white/20 uppercase">
           Media Offline
         </div>
       )}
