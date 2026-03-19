@@ -159,7 +159,7 @@ export function Footer() {
       <div className="flex flex-col items-center justify-between gap-8 border-t border-white/5 pt-12 md:flex-row">
         <div className="flex flex-col items-center gap-1 md:items-start">
           <p className="text-[10px] font-medium tracking-[0.4em] text-white/40 uppercase">
-            &copy; 2026 NILXNJXN — All Rights Reserved
+            &copy; 2026 NILXNJXN
           </p>
           <div className="text-muted-foreground flex items-center gap-4 text-[9px] font-bold tracking-widest uppercase">
             <Link href="/privacy" className="hover:text-accent transition-colors">
