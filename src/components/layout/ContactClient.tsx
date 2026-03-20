@@ -78,7 +78,7 @@ export function ContactClient() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="font-expressive text-7xl leading-none tracking-tighter md:text-9xl"
+            className="font-expressive text-7xl leading-none tracking-normal md:text-9xl"
           >
             Contact
           </motion.h1>
@@ -99,154 +99,160 @@ export function ContactClient() {
         />
       </section>
 
-      {/* SECTION 2: CONTACT FORM */}
+      {/* SECTION 2: CONTACT & SOCIAL */}
       <section className="relative z-10 px-6 pb-24">
-        <div className="mx-auto max-w-md">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="rounded-[24px] border border-white/10 bg-[#111111]/80 p-8 shadow-2xl backdrop-blur-2xl md:p-10"
-          >
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              {/* Name Field */}
-              <div className="space-y-2">
-                <label className="text-muted-foreground ml-1 text-[9px] font-bold tracking-widest uppercase">
-                  Name
-                </label>
-                <input
-                  {...register('name')}
-                  type="text"
-                  placeholder="Your Name"
-                  className="font-functional focus:border-accent/40 w-full rounded-[12px] border border-white/10 bg-[#111111] px-5 py-3.5 text-xs text-white transition-all placeholder:text-white/10 focus:ring-4 focus:ring-white/5 focus:outline-none"
-                />
-                {errors.name && (
-                  <p className="ml-1 text-[9px] font-medium tracking-wide text-red-500/80 uppercase">
-                    {errors.name.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Email Field */}
-              <div className="space-y-2">
-                <label className="text-muted-foreground ml-1 text-[9px] font-bold tracking-widest uppercase">
-                  Email
-                </label>
-                <input
-                  {...register('email')}
-                  type="email"
-                  placeholder="Digital Address"
-                  className="font-functional focus:border-accent/40 w-full rounded-[12px] border border-white/10 bg-[#111111] px-5 py-3.5 text-xs text-white transition-all placeholder:text-white/10 focus:ring-4 focus:ring-white/5 focus:outline-none"
-                />
-                {errors.email && (
-                  <p className="ml-1 text-[9px] font-medium tracking-wide text-red-500/80 uppercase">
-                    {errors.email.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Message Field */}
-              <div className="space-y-2">
-                <label className="text-muted-foreground ml-1 text-[9px] font-bold tracking-widest uppercase">
-                  Message
-                </label>
-                <textarea
-                  {...register('message')}
-                  placeholder="What is the shade?"
-                  rows={4}
-                  className="font-functional focus:border-accent/40 w-full resize-none rounded-[12px] border border-white/10 bg-[#111111] px-5 py-3.5 text-xs text-white transition-all placeholder:text-white/10 focus:ring-4 focus:ring-white/5 focus:outline-none"
-                />
-                {errors.message && (
-                  <p className="ml-1 text-[9px] font-medium tracking-wide text-red-500/80 uppercase">
-                    {errors.message.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Submit Button */}
-              <Magnetic strength={0.1}>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="bg-accent hover:bg-accent/90 focus:ring-accent/40 flex h-14 w-full items-center justify-center gap-3 rounded-[12px] px-8 text-[11px] font-bold tracking-[0.3em] text-black uppercase transition-all focus:ring-4 disabled:opacity-50"
-                >
-                  {isSubmitting ? (
-                    'Transmitting...'
-                  ) : (
-                    <>
-                      Send Message
-                      <HugeiconsIcon icon={ArrowRight01Icon} size={16} />
-                    </>
-                  )}
-                </button>
-              </Magnetic>
-            </form>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* SECTION 3: SOCIAL CONTACT OPTIONS */}
-      <section className="pb-32">
-        <div className="mx-auto max-w-7xl px-6 text-center">
-          <motion.h4
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-muted-foreground font-functional mb-8 text-[10px] font-bold tracking-[0.4em] uppercase"
-          >
-            Or reach out directly
-          </motion.h4>
-          <div className="flex flex-wrap justify-center gap-4">
-            {[
-              {
-                name: 'Instagram',
-                label: '@nilxnjxn',
-                icon: InstagramIcon,
-                href: 'https://instagram.com/nilxnjxn',
-                color: '#E4405F',
-              },
-              {
-                name: 'X',
-                label: 'Realnilxnjxn',
-                icon: TwitterIcon,
-                href: 'https://x.com/Realnilxnjxn',
-                color: '#FFFFFF',
-              },
-              {
-                name: 'Email',
-                label: 'hello' + '@' + 'nilxnjxn.com',
-                icon: Mail01Icon,
-                href: 'mailto:' + 'hello' + '@' + 'nilxnjxn.com',
-                color: '#22D3EE',
-                isEmail: true,
-              },
-            ].map((social) => (
-              <Magnetic key={social.name} strength={0.2}>
-                <a
-                  href={social.href}
-                  target={social.isEmail ? undefined : '_blank'}
-                  rel={social.isEmail ? undefined : 'noopener noreferrer'}
-                  className="hover:border-accent/30 group flex items-center gap-4 rounded-full border border-white/5 bg-white/5 px-6 py-4 transition-all hover:bg-white/10"
-                >
-                  <div
-                    className="flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white transition-colors group-hover:bg-white group-hover:text-black"
-                    style={{ '--brand-color': social.color } as React.CSSProperties}
-                  >
-                    <HugeiconsIcon icon={social.icon} size={18} />
+        <div className="mx-auto max-w-7xl">
+          <div className="flex flex-col items-start gap-20 lg:flex-row lg:justify-between lg:gap-32">
+            
+            {/* Form Container - Far Left */}
+            <div className="w-full max-w-xl">
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className="space-y-12"
+              >
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
+                  {/* Name Field */}
+                  <div className="group space-y-4">
+                    <label className="text-muted-foreground ml-1 text-xs font-bold tracking-[0.3em] uppercase transition-colors group-focus-within:text-accent">
+                      Name
+                    </label>
+                    <input
+                      {...register('name')}
+                      type="text"
+                      placeholder="Your Name"
+                      className="font-functional focus:border-accent w-full border-b border-white/10 bg-transparent py-4 text-base text-white transition-all placeholder:text-white/5 focus:ring-0 focus:outline-none"
+                    />
+                    {errors.name && (
+                      <p className="ml-1 text-[10px] font-medium tracking-wide text-red-500/80 uppercase">
+                        {errors.name.message}
+                      </p>
+                    )}
                   </div>
-                  <div className="text-left">
-                    <span className="text-muted-foreground block text-[8px] font-bold tracking-widest uppercase">
-                      {social.name}
-                    </span>
-                    <span className="font-functional block text-[10px] tracking-widest text-white">
-                      {social.label}
-                    </span>
+
+                  {/* Email Field */}
+                  <div className="group space-y-4">
+                    <label className="text-muted-foreground ml-1 text-xs font-bold tracking-[0.3em] uppercase transition-colors group-focus-within:text-accent">
+                      Email
+                    </label>
+                    <input
+                      {...register('email')}
+                      type="email"
+                      placeholder="Digital Address"
+                      className="font-functional focus:border-accent w-full border-b border-white/10 bg-transparent py-4 text-base text-white transition-all placeholder:text-white/5 focus:ring-0 focus:outline-none"
+                    />
+                    {errors.email && (
+                      <p className="ml-1 text-[10px] font-medium tracking-wide text-red-500/80 uppercase">
+                        {errors.email.message}
+                      </p>
+                    )}
                   </div>
-                </a>
-              </Magnetic>
-            ))}
+
+                  {/* Message Field */}
+                  <div className="group space-y-4">
+                    <label className="text-muted-foreground ml-1 text-xs font-bold tracking-[0.3em] uppercase transition-colors group-focus-within:text-accent">
+                      Message
+                    </label>
+                    <textarea
+                      {...register('message')}
+                      placeholder="What is the shade?"
+                      rows={4}
+                      className="font-functional focus:border-accent min-h-[120px] w-full resize-none border-b border-white/10 bg-transparent py-4 text-base text-white transition-all placeholder:text-white/5 focus:ring-0 focus:outline-none"
+                    />
+                    {errors.message && (
+                      <p className="ml-1 text-[10px] font-medium tracking-wide text-red-500/80 uppercase">
+                        {errors.message.message}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Submit Button */}
+                  <div className="pt-4">
+                    <Magnetic strength={0.1}>
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="bg-accent hover:bg-accent/90 focus:ring-accent/40 flex h-16 w-full items-center justify-center gap-4 rounded-[12px] px-10 text-sm font-bold tracking-[0.4em] text-black uppercase transition-all focus:ring-4 disabled:opacity-50 md:w-auto"
+                      >
+                        {isSubmitting ? (
+                          'Transmitting...'
+                        ) : (
+                          <>
+                            Send Message
+                            <HugeiconsIcon icon={ArrowRight01Icon} size={18} />
+                          </>
+                        )}
+                      </button>
+                    </Magnetic>
+                  </div>
+                </form>
+              </motion.div>
+            </div>
+
+            {/* Social Contact - Right of the form */}
+            <div className="w-full space-y-12 lg:w-auto lg:min-w-[360px]">
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4 }}
+                className="space-y-10"
+              >
+                <div className="flex flex-col gap-6">
+                  {[
+                    {
+                      name: 'Instagram',
+                      label: '@nilxnjxn',
+                      icon: InstagramIcon,
+                      href: 'https://instagram.com/nilxnjxn',
+                      color: '#E4405F',
+                    },
+                    {
+                      name: 'X',
+                      label: 'Realnilxnjxn',
+                      icon: TwitterIcon,
+                      href: 'https://x.com/Realnilxnjxn',
+                      color: '#FFFFFF',
+                    },
+                    {
+                      name: 'Email',
+                      label: process.env.NEXT_PUBLIC_CONTACT_EMAIL,
+                      icon: Mail01Icon,
+                      href: `mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL}`,
+                      color: '#22D3EE',
+                      isEmail: true,
+                    },
+                  ].map((social) => (
+                    <Magnetic key={social.name} strength={0.1}>
+                      <a
+                        href={social.href}
+                        target={social.isEmail ? undefined : '_blank'}
+                        rel={social.isEmail ? undefined : 'noopener noreferrer'}
+                        className="group flex items-center gap-6 py-2 transition-all"
+                      >
+                        <div
+                          className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-all group-hover:border-accent group-hover:bg-accent group-hover:text-black"
+                        >
+                          <HugeiconsIcon icon={social.icon} size={20} />
+                        </div>
+                        <div className="text-left">
+                          <span className="text-muted-foreground block text-[10px] font-bold tracking-widest uppercase opacity-60">
+                            {social.name}
+                          </span>
+                          <span className="font-functional block text-sm tracking-widest text-white underline-offset-8 transition-all group-hover:text-accent group-hover:underline">
+                            {social.label}
+                          </span>
+                        </div>
+                      </a>
+                    </Magnetic>
+                  ))}
+                </div>
+              </motion.div>
+            </div>
           </div>
         </div>
       </section>
+
 
       {/* Global Grain */}
       <div className="pointer-events-none fixed inset-0 z-50 opacity-[0.02] mix-blend-overlay">

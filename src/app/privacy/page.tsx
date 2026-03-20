@@ -33,7 +33,7 @@ export default function PrivacyPage() {
         </Magnetic>
 
         <header className="space-y-4">
-          <h1 className="font-expressive text-6xl tracking-tighter text-white md:text-8xl">
+          <h1 className="font-expressive text-6xl tracking-normal text-white md:text-8xl">
             Privacy
           </h1>
           <p className="text-muted-foreground font-functional text-sm font-light tracking-[0.4em] uppercase">

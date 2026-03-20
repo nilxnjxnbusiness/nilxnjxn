@@ -59,7 +59,7 @@ export default function AboutPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: 'easeOut' }}
-              className="font-expressive text-7xl leading-[0.8] tracking-tighter text-white md:text-[10rem]"
+              className="font-expressive text-7xl leading-[0.8] tracking-normal text-white md:text-[10rem]"
             >
               Nilxnjxn
             </motion.h1>

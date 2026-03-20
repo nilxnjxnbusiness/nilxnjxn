@@ -86,11 +86,12 @@ export function Footer() {
             <Image
               src="/LOGO-FINAL.png"
               alt="Logo"
-              width={100}
+              width={160}
               height={64}
+              quality={100}
               className="h-16 w-auto opacity-90 transition-opacity group-hover:opacity-100"
             />
-            <span className="font-expressive mt-1 px-1 text-base tracking-[0.4em] text-white">
+            <span className="font-expressive mt-1 px-1 text-sm tracking-[0.2em] text-white">
               nilxnjxn
             </span>
           </Link>

@@ -1,5 +1,5 @@
 import './globals.css';
-import { Inter } from 'next/font/google';
+import { Inter, Permanent_Marker } from 'next/font/google';
 import localFont from 'next/font/local';
 import { WaveformPlayer } from '@/components/player/WaveformPlayer';
 import { Header } from '@/components/layout/Header';
@@ -12,8 +12,9 @@ const functional = Inter({
   variable: '--font-functional',
 });
 
-const expressive = localFont({
-  src: './fonts/MrsSheppards-Regular.ttf',
+const expressive = Permanent_Marker({
+  weight: '400',
+  subsets: ['latin'],
   variable: '--font-expressive',
 });
 

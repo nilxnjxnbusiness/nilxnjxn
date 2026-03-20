@@ -20,7 +20,7 @@ export default function NotFound() {
           <motion.h1
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="font-expressive text-[12rem] leading-none tracking-tighter text-white/5 select-none md:text-[20rem]"
+            className="font-expressive text-[12rem] leading-none tracking-normal text-white/5 select-none md:text-[20rem]"
           >
             404
           </motion.h1>
@@ -29,7 +29,7 @@ export default function NotFound() {
             animate={{ opacity: 1, y: 0 }}
             className="absolute inset-0 flex flex-col items-center justify-center space-y-4"
           >
-            <h2 className="font-expressive text-5xl tracking-tighter text-white md:text-7xl">
+            <h2 className="font-expressive text-5xl tracking-normal text-white md:text-7xl">
               Void Lost.
             </h2>
             <p className="text-muted-foreground font-functional text-[10px] font-light tracking-[0.5em] uppercase">

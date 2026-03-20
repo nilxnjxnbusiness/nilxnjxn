@@ -103,7 +103,7 @@ export function HeroPlayer({ track, onPlay, hasInteracted }: HeroPlayerProps) {
               transition={{ duration: 1, delay: 0.2 }}
               className="space-y-4 px-4 text-center"
             >
-              <h1 className="font-expressive text-6xl leading-tight tracking-tighter text-white mix-blend-difference drop-shadow-2xl sm:text-7xl md:text-[10rem] lg:text-[12rem]">
+              <h1 className="font-expressive text-6xl leading-tight tracking-normal text-white mix-blend-difference drop-shadow-2xl sm:text-7xl md:text-[10rem] lg:text-[12rem]">
                 NILXNJXN
               </h1>
               <div className="overflow-hidden">

@@ -23,7 +23,7 @@ export async function sendContactEmail(formData: ContactFormData) {
   try {
     const { data, error } = await resend.emails.send({
       from: 'NILXNJXN Contact <onboarding@resend.dev>',
-      to: ['hello@nilxnjxn.com'],
+      to: [process.env.NEXT_PUBLIC_CONTACT_EMAIL as string],
       subject: `New Message from ${formData.name}`,
       html: `
         <div style="font-family: sans-serif; padding: 20px; color: #333;">

@@ -24,7 +24,7 @@ export function SuccessClient() {
         </motion.div>
 
         <div className="space-y-4">
-          <h1 className="font-expressive text-5xl tracking-tighter text-white md:text-7xl">
+          <h1 className="font-expressive text-5xl tracking-normal text-white md:text-7xl">
             Unlocked
           </h1>
           <p className="text-muted-foreground font-functional text-sm tracking-[0.4em] uppercase">

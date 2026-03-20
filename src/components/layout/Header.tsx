@@ -55,11 +55,13 @@ export function Header() {
               <Image
                 src="/LOGO-FINAL.png"
                 alt="Logo"
-                width={48}
+                width={120}
                 height={48}
+                priority
+                quality={100}
                 className="h-10 w-auto transition-transform duration-500 group-hover:scale-105 md:h-12"
               />
-              <span className="font-expressive mt-1 hidden text-xs tracking-[0.3em] text-white sm:block md:text-sm">
+              <span className="font-expressive mt-1 hidden text-[11px] tracking-[0.15em] text-white sm:block md:text-sm">
                 nilxnjxn
               </span>
             </Link>

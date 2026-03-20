@@ -134,7 +134,7 @@ export function TrackDetailClient({ track }: TrackDetailClientProps) {
               Shade: {track.season}
             </div>
 
-            <motion.h1 className="reveal font-expressive text-6xl leading-tight tracking-tighter text-white md:text-8xl lg:text-9xl">
+            <motion.h1 className="reveal font-expressive text-6xl leading-tight tracking-normal text-white md:text-8xl lg:text-9xl">
               {track.title}
             </motion.h1>
 

@@ -90,7 +90,7 @@ export function HomeClient({ tracks }: HomeClientProps) {
                   <h3 className="shade-title text-accent font-functional text-[10px] font-bold tracking-[0.5em] uppercase">
                     The Concept
                   </h3>
-                  <h2 className="shade-title font-expressive text-5xl leading-tight tracking-tighter text-white drop-shadow-2xl md:text-8xl">
+                  <h2 className="shade-title font-expressive text-5xl leading-tight tracking-normal text-white drop-shadow-2xl md:text-8xl">
                     SHADES <br /> OF BEING.
                   </h2>
                 </div>
@@ -130,7 +130,7 @@ export function HomeClient({ tracks }: HomeClientProps) {
                 <div className="mx-auto max-w-7xl space-y-16">
                   <div className="flex items-end justify-between">
                     <div className="space-y-2">
-                      <h2 className="font-expressive text-4xl tracking-tighter text-white md:text-5xl">
+                      <h2 className="font-expressive text-4xl tracking-normal text-white md:text-5xl">
                         New Frequencies
                       </h2>
                       <p className="text-muted-foreground font-functional text-[10px] tracking-[0.4em] uppercase">
@@ -173,7 +173,7 @@ export function HomeClient({ tracks }: HomeClientProps) {
                     <span className="text-accent text-[10px] font-bold tracking-[0.5em] uppercase">
                       Identity
                     </span>
-                    <h2 className="font-expressive text-5xl tracking-tighter text-white md:text-7xl">
+                    <h2 className="font-expressive text-5xl tracking-normal text-white md:text-7xl">
                       Behind the <br /> Shadow
                     </h2>
                   </div>
