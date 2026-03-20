@@ -12,7 +12,7 @@ import { Magnetic } from '@/components/ui/Magnetic';
 
 const navLinks = [
   { name: 'Home', href: '/' },
-  { name: 'Music', href: '/music' },
+  // { name: 'Music', href: '/music' },
   { name: 'About', href: '/about' },
 ];
 

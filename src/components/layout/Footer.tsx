@@ -49,7 +49,7 @@ const socialLinks = [
 ];
 
 const quickLinks = [
-  { name: 'Music', href: '/music' },
+  // { name: 'Music', href: '/music' },
   { name: 'About', href: '/about' },
   { name: 'Store', href: '/store' },
   { name: 'Licensing', href: '/licensing' },

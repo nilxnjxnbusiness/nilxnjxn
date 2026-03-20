@@ -76,7 +76,7 @@ export function TrackCard({ track, priority = false }: TrackCardProps) {
       <Link href={`/music/${track.slug}`} className="group relative block py-4">
         <div
           ref={cardRef}
-          className="track-card group play-trigger relative aspect-square w-full max-w-[340px] overflow-hidden rounded-[32px] border border-white/10 bg-white/5 shadow-2xl transition-all duration-700 hover:scale-[1.02] hover:border-white/30 hover:shadow-cyan-500/20 md:rounded-[48px]"
+          className="track-card group play-trigger relative aspect-square w-full max-w-[340px] overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-2xl transition-all duration-700 hover:scale-[1.05] hover:border-white/30 hover:shadow-cyan-500/20"
         >
           {/* Performance Optimized Artwork */}
           <LazyImage

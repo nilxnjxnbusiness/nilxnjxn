@@ -90,7 +90,7 @@ export function HomeClient({ tracks }: HomeClientProps) {
                   <h3 className="shade-title text-accent font-functional text-[10px] font-bold tracking-[0.5em] uppercase">
                     The Concept
                   </h3>
-                  <h2 className="shade-title font-expressive text-6xl leading-tight tracking-tighter text-white drop-shadow-2xl md:text-9xl">
+                  <h2 className="shade-title font-expressive text-5xl leading-tight tracking-tighter text-white drop-shadow-2xl md:text-8xl">
                     SHADES <br /> OF BEING.
                   </h2>
                 </div>
@@ -108,14 +108,17 @@ export function HomeClient({ tracks }: HomeClientProps) {
                       Dropping 2026, it serves as a digital monolith to the journey of Nila — from
                       the valleys of Assam to the global digital frontier.
                     </p>
-                    <Magnetic strength={0.2}>
+                    {/* <Magnetic strength={0.2}>
                       <Link
                         href="/music"
                         className="hover:bg-accent inline-flex h-16 items-center rounded-full bg-white px-12 text-[10px] font-bold tracking-[0.3em] text-black uppercase shadow-[0_20px_40px_rgba(0,0,0,0.5)] transition-all"
                       >
                         Explore the Archive
                       </Link>
-                    </Magnetic>
+                    </Magnetic> */}
+                    <div className="pt-8">
+                      <div className="h-px w-full bg-white/10" />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -134,15 +137,15 @@ export function HomeClient({ tracks }: HomeClientProps) {
                         Latest available shades
                       </p>
                     </div>
-                    <Link
+                    {/* <Link
                       href="/music"
                       className="text-accent border-accent/20 hidden border-b pb-1 text-[10px] font-bold tracking-[0.2em] uppercase transition-colors hover:text-white md:block"
                     >
                       View All
-                    </Link>
+                    </Link> */}
                   </div>
 
-                  <div className="no-scrollbar -mx-6 flex snap-x snap-mandatory gap-12 overflow-x-auto px-6 pb-12">
+                  <div className="no-scrollbar scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-8 overflow-x-auto px-6 pb-12">
                     {otherTracks.map((track) => (
                       <div key={track.id} className="snap-center">
                         <TrackCard track={track} />
@@ -170,7 +173,7 @@ export function HomeClient({ tracks }: HomeClientProps) {
                     <span className="text-accent text-[10px] font-bold tracking-[0.5em] uppercase">
                       Identity
                     </span>
-                    <h2 className="font-expressive text-6xl tracking-tighter text-white md:text-7xl">
+                    <h2 className="font-expressive text-5xl tracking-tighter text-white md:text-7xl">
                       Behind the <br /> Shadow
                     </h2>
                   </div>

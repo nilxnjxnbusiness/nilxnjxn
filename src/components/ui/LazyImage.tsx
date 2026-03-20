@@ -10,9 +10,16 @@ interface LazyImageProps {
   alt: string;
   className?: string;
   aspectRatio?: string;
+  priority?: boolean;
 }
 
-export function LazyImage({ src, alt, className, aspectRatio = 'aspect-square' }: LazyImageProps) {
+export function LazyImage({
+  src,
+  alt,
+  className,
+  aspectRatio = 'aspect-square',
+  priority = false,
+}: LazyImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(false);
 
@@ -32,7 +39,8 @@ export function LazyImage({ src, alt, className, aspectRatio = 'aspect-square' }
         )}
         onLoad={() => setIsLoaded(true)}
         onError={() => setError(true)}
-        loading="lazy"
+        priority={priority}
+        loading={priority ? undefined : 'lazy'}
       />
 
       {error && (
