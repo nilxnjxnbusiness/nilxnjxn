@@ -87,7 +87,7 @@ export function HeroPlayer({ track, onPlay, hasInteracted }: HeroPlayerProps) {
       <div className="from-background to-background/90 absolute inset-0 z-10 bg-linear-to-b via-transparent" />
 
       {/* Centered Play Core */}
-      <div className="relative z-20 flex flex-col items-center justify-center gap-12 pt-16 md:pt-20">
+      <div className="relative z-20 flex flex-col items-center justify-center gap-12 pb-24 md:pb-32">
         <AnimatePresence mode="wait">
           {!hasInteracted ? (
             <motion.div
