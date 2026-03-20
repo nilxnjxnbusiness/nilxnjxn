@@ -131,11 +131,8 @@ export function HomeClient({ tracks }: HomeClientProps) {
                   <div className="flex items-end justify-between">
                     <div className="space-y-2">
                       <h2 className="font-expressive text-4xl tracking-normal text-white md:text-5xl">
-                        New Frequencies
-                      </h2>
-                      <p className="text-muted-foreground font-functional text-[10px] tracking-[0.4em] uppercase">
                         Latest available shades
-                      </p>
+                      </h2>
                     </div>
                     {/* <Link
                       href="/music"
