@@ -8,10 +8,14 @@ import { PlayIcon, PauseIcon } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
 import Image from 'next/image';
 
+import { usePathname } from 'next/navigation';
+
 import { cn } from '@/lib/utils';
 import { Magnetic } from '@/components/ui/Magnetic';
 
 export function WaveformPlayer() {
+  const pathname = usePathname();
+  const isContactPage = pathname === '/contact';
   const containerRef = useRef<HTMLDivElement>(null);
   const wavesurferRef = useRef<WaveSurfer | null>(null);
   const {
@@ -109,7 +113,7 @@ export function WaveformPlayer() {
   return (
     <motion.div
       initial={{ y: 150 }}
-      animate={{ y: isVisibleByFooter ? 0 : 150 }}
+      animate={{ y: isVisibleByFooter && !isContactPage ? 0 : 150 }}
       exit={{ y: 150 }}
       className="pointer-events-none fixed right-0 bottom-0 left-0 z-100 px-4 pt-2 pb-6 md:pb-8"
     >

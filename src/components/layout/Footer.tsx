@@ -63,6 +63,7 @@ const quickLinks = [
   // { name: 'Music', href: '/music' },
   { name: 'About', href: '/about' },
   { name: 'Store', href: '/store' },
+  { name: 'Contact', href: '/contact' },
   { name: 'Licensing', href: '/licensing' },
 ];
 
@@ -74,7 +75,10 @@ const legalLinks = [
 
 export function Footer() {
   return (
-    <footer id="site-footer" className="bg-background selection:bg-accent relative mt-24 border-t border-white/5 px-6 pt-24 pb-12 selection:text-black">
+    <footer
+      id="site-footer"
+      className="bg-background selection:bg-accent relative mt-24 border-t border-white/5 px-6 pt-24 pb-12 selection:text-black"
+    >
       <div className="mx-auto mb-24 grid max-w-7xl grid-cols-1 gap-12 uppercase md:grid-cols-2 lg:grid-cols-4">
         {/* Brand Column */}
         <div className="space-y-6">
@@ -94,38 +98,6 @@ export function Footer() {
             Upcoming Hip-hop Artist from Assam, India. &quot;LIVE FREE, BE YOU&quot;. Catchy Hooks &
             Slick Bars — delivering a New Wave to the rap scene.
           </p>
-          <div className="flex flex-col gap-4">
-            {/* Top Row: 5 Links */}
-            <div className="flex flex-wrap gap-4">
-              {socialLinks.slice(0, 5).map((social) => (
-                <Magnetic key={social.name} strength={0.2}>
-                  <a
-                    href={social.href}
-                    style={{ '--hover-color': social.hoverColor } as React.CSSProperties}
-                    className="hover:border-(--hover-color) hover:text-(--hover-color) text-muted-foreground flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 transition-all hover:bg-white/10"
-                    aria-label={social.name}
-                  >
-                    <HugeiconsIcon icon={social.icon} size={18} />
-                  </a>
-                </Magnetic>
-              ))}
-            </div>
-            {/* Bottom Row: 3 Links (Centered) */}
-            <div className="flex flex-wrap justify-center gap-4 lg:justify-start">
-              {socialLinks.slice(5).map((social) => (
-                <Magnetic key={social.name} strength={0.3}>
-                  <a
-                    href={social.href}
-                    style={{ '--hover-color': social.hoverColor } as React.CSSProperties}
-                    className="hover:border-(--hover-color) hover:text-(--hover-color) text-muted-foreground flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 transition-all hover:bg-white/10"
-                    aria-label={social.name}
-                  >
-                    <HugeiconsIcon icon={social.icon} size={18} />
-                  </a>
-                </Magnetic>
-              ))}
-            </div>
-          </div>
         </div>
 
         {/* Quick Links */}
@@ -183,6 +155,27 @@ export function Footer() {
             </button>
           </div>
         </div>
+      </div>
+
+      {/* Social Links Row (Centered) */}
+      <div className="mb-12 flex flex-wrap justify-center gap-5 md:gap-6">
+        {socialLinks.map((social) => (
+          <Magnetic key={social.name} strength={0.3}>
+            <a
+              href={social.href}
+              style={{ '--hover-color': social.hoverColor } as React.CSSProperties}
+              className="hover:border-(--hover-color) hover:text-(--hover-color) hover:shadow-[0_0_20px_var(--hover-color)] group relative flex h-12 w-12 items-center justify-center rounded-full border border-white/10 transition-all hover:bg-white/5 active:scale-95 md:h-14 md:w-14"
+              aria-label={social.name}
+            >
+              <HugeiconsIcon
+                icon={social.icon}
+                size={24}
+                className="relative z-10 transition-transform duration-300 group-hover:scale-115"
+              />
+              <div className="absolute inset-0 rounded-full bg-(--hover-color) opacity-0 blur-md transition-opacity group-hover:opacity-20" />
+            </a>
+          </Magnetic>
+        ))}
       </div>
 
       {/* Bottom Row */}

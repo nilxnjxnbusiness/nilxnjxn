@@ -14,6 +14,7 @@ const navLinks = [
   { name: 'Home', href: '/' },
   // { name: 'Music', href: '/music' },
   { name: 'About', href: '/about' },
+  { name: 'Contact', href: '/contact' },
 ];
 
 export function Header() {
