@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { get } from '@vercel/edge-config';
 
 export interface Track {
   id: string;
@@ -19,6 +20,18 @@ let tracksCache: Track[] | null = null;
 export async function getTracks(): Promise<Track[]> {
   if (tracksCache) return tracksCache;
 
+  try {
+    const edgeTracks = await get<Track[]>('tracks');
+    if (edgeTracks && Array.isArray(edgeTracks) && edgeTracks.length > 0) {
+      console.log('Fetched tracks from Vercel Edge Config');
+      tracksCache = edgeTracks;
+      return edgeTracks;
+    }
+  } catch (err) {
+    console.warn('Edge Config not available or empty, falling back to filesystem.', err);
+  }
+
+  // 2. Local Filesystem Fallback (Solid for local dev or if Edge is not linked)
   const publicPath = path.join(process.cwd(), 'public');
   const dirPath = path.join(publicPath, 'cover-arts');
   

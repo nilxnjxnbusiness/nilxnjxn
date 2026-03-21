@@ -50,6 +50,7 @@
     "@react-three/fiber": "^9.5.0",
     "@reduxjs/toolkit": "^2.11.2",
     "@vercel/analytics": "^2.0.1",
+    "@vercel/edge-config": "^1.4.3",
     "@vercel/speed-insights": "^2.0.0",
     "appwrite": "^23.0.0",
     "class-variance-authority": "^0.7.1",
