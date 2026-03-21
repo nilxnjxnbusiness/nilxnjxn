@@ -164,7 +164,7 @@ export function TrackDetailClient({ track }: TrackDetailClientProps) {
                     size={18}
                     className="text-current"
                   />
-                  {isActive ? 'Pause' : 'Play Preview'}
+                  {isActive ? 'Pause' : 'Preview'}
                 </Button>
               </Magnetic>
 

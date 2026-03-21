@@ -131,30 +131,40 @@ export function HomeClient({ tracks }: HomeClientProps) {
               </div>
             </section>
 
-            {/* Latest Releases - Horizontal Scroll */}
+            {/* Latest Releases - Infinite Marquee */}
             {otherTracks.length > 0 && (
-              <section className="relative z-10 border-y border-white/5 bg-[#080808] px-6 py-32">
-                <div className="mx-auto max-w-7xl space-y-16">
-                  <div className="flex items-end justify-between">
-                    <div className="space-y-2">
-                      <h2 className="font-expressive text-4xl tracking-normal text-white md:text-5xl">
-                        Latest available shades
-                      </h2>
+              <section className="relative z-10 border-y border-white/5 bg-[#080808] py-32">
+                <div className="space-y-16">
+                  <div className="mx-auto max-w-7xl px-6">
+                    <div className="flex items-end justify-between">
+                      <div className="space-y-2">
+                        <h2 className="font-expressive text-4xl tracking-normal text-white md:text-5xl">
+                          Latest available shades
+                        </h2>
+                      </div>
                     </div>
-                    {/* <Link
-                      href="/music"
-                      className="text-accent border-accent/20 hidden border-b pb-1 text-[10px] font-bold tracking-[0.2em] uppercase transition-colors hover:text-white md:block"
-                    >
-                      View All
-                    </Link> */}
                   </div>
 
-                  <div className="no-scrollbar scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-8 overflow-x-auto px-6 pb-12">
-                    {otherTracks.map((track) => (
-                      <div key={track.id} className="flex-none snap-center">
-                        <TrackCard track={track} />
-                      </div>
-                    ))}
+                  {/* Marquee Container with Gradient Mask */}
+                  <div className="w-full inline-flex flex-nowrap overflow-hidden mask-[linear-gradient(to_right,transparent_0,black_128px,black_calc(100%-128px),transparent_100%)]">
+                    <ul className="flex animate-infinite-scroll items-center justify-center md:justify-start [&_li]:mx-4">
+                      {otherTracks.map((track) => (
+                        <li key={track.id} className="flex-none">
+                          <TrackCard track={track} />
+                        </li>
+                      ))}
+                    </ul>
+                    {/* Duplicate List for Seamless Loop */}
+                    <ul
+                      className="flex animate-infinite-scroll items-center justify-center md:justify-start [&_li]:mx-4"
+                      aria-hidden="true"
+                    >
+                      {otherTracks.map((track) => (
+                        <li key={`${track.id}-copy`} className="flex-none">
+                          <TrackCard track={track} />
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
               </section>
@@ -168,7 +178,7 @@ export function HomeClient({ tracks }: HomeClientProps) {
                     src="/extra/250519DSC_0023.webp"
                     alt="Artist Profile"
                     fill
-                    className="h-full w-full object-cover grayscale transition-all duration-1000 group-hover:scale-110 group-hover:grayscale-0"
+                    className="h-full w-full object-cover grayscale-0 md:grayscale transition-all duration-1000 group-hover:scale-110 group-hover:grayscale-0"
                   />
                   <div className="bg-accent/20 absolute inset-0 mix-blend-overlay transition-opacity group-hover:opacity-0" />
                 </div>
