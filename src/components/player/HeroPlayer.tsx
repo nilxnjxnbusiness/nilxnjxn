@@ -119,7 +119,7 @@ export function HeroPlayer({ track, onPlay, hasInteracted }: HeroPlayerProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.2 }}
-              className="space-y-4 px-4 text-center"
+              className="space-y-4 px-4 text-center translate-y-8 md:translate-y-12"
             >
               <h1 className="font-expressive text-6xl leading-tight tracking-normal text-white mix-blend-difference drop-shadow-2xl sm:text-7xl md:text-[10rem] lg:text-[12rem]">
                 NILXNJXN

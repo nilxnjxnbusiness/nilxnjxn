@@ -95,9 +95,13 @@ export function Footer() {
               nilxnjxn
             </span>
           </Link>
-          <p className="text-muted-foreground font-functional max-w-xs text-sm leading-relaxed font-light lowercase">
-            Upcoming Hip-hop Artist from Assam, India. &quot;LIVE FREE, BE YOU&quot;. Catchy Hooks &
-            Slick Bars — delivering a New Wave to the rap scene.
+          <p className="text-muted-foreground font-functional max-w-xs text-sm leading-relaxed font-light">
+            Hip-Hop Artist from Assam, India with Catchy Hooks & Slick Bars — delivering a New Wave
+            to the rap scene.
+            <br />
+            <span className="mt-2 block italic text-white/50 tracking-wider">
+              &quot;LIVE FREE, BE YOU&quot;
+            </span>
           </p>
         </div>
 

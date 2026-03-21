@@ -79,7 +79,7 @@ const jsonLd = {
   name: 'Nilxnjxn',
   alternateName: 'Nila',
   description:
-    'Upcoming Hip-hop Artist from Assam, India specializing in cinematic soundscapes and seasonal mood exploration.',
+    'Hip-hop Artist from Assam, India specializing in cinematic soundscapes and seasonal mood exploration.',
   url: 'https://nilxnjxn.com',
   logo: 'https://nilxnjxn.com/LOGO-FINAL.png',
   sameAs: [

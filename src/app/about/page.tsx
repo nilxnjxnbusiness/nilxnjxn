@@ -77,7 +77,7 @@ export default function AboutPage() {
                   &quot;LIVE FREE, BE YOU&quot;
                 </p>
                 <p className="text-lg font-light text-white/50">
-                  Nilxnjxn aka Nila, is an upcoming Hip-hop Artist from Assam, India. With his{' '}
+                  Nilxnjxn aka Nila, is an Hip-hop Artist from Assam, India. With his{' '}
                   <span className="font-expressive-alt text-accent ml-2 hidden text-3xl md:inline">
                     Catchy Hooks & Slick Bars
                   </span>
