@@ -178,7 +178,7 @@ export function HomeClient({ tracks }: HomeClientProps) {
                     src="/extra/250519DSC_0023.webp"
                     alt="Artist Profile"
                     fill
-                    className="h-full w-full object-cover grayscale transition-all duration-1000 group-hover:scale-110 group-hover:grayscale-0"
+                    className="h-full w-full object-cover grayscale-0 md:grayscale transition-all duration-1000 group-hover:scale-110 group-hover:grayscale-0"
                   />
                   <div className="bg-accent/20 absolute inset-0 mix-blend-overlay transition-opacity group-hover:opacity-0" />
                 </div>
