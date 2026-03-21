@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useLayoutEffect } from 'react';
+import { useRef, useLayoutEffect, useState, useEffect } from 'react';
 import { Track } from '@/lib/data';
 import { useAudioStore } from '@/store/audioStore';
 import { PlayIcon, PauseIcon } from '@hugeicons/core-free-icons';
@@ -21,9 +21,28 @@ export function TrackCard({ track, priority = false }: TrackCardProps) {
   const { currentTrack, isPlaying, playTrack, togglePlayPause } = useAudioStore();
   const cardRef = useRef<HTMLDivElement>(null);
   const infoRef = useRef<HTMLDivElement>(null);
+  const [shouldPreload, setShouldPreload] = useState(false);
 
   const isCurrent = currentTrack?.id === track.id;
   const isActive = isCurrent && isPlaying;
+
+  // Intersection Observer for Lazy Preloading
+  useEffect(() => {
+    if (!cardRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setShouldPreload(true);
+          observer.disconnect(); // Only need to trigger once
+        }
+      },
+      { rootMargin: '200px' } // Start preloading when 200px from viewport
+    );
+
+    observer.observe(cardRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   useLayoutEffect(() => {
     if (!cardRef.current || !infoRef.current) return;
@@ -74,7 +93,11 @@ export function TrackCard({ track, priority = false }: TrackCardProps) {
 
   return (
     <Magnetic strength={0.1}>
-      <Link href={`/music/${track.slug}`} className="group relative block py-4">
+      <Link 
+        href={`/music/${track.slug}`} 
+        className="group relative block py-4"
+        onMouseEnter={() => setShouldPreload(true)}
+      >
         <motion.div
           ref={cardRef}
           whileTap={{ scale: 0.98 }}
@@ -140,12 +163,12 @@ export function TrackCard({ track, priority = false }: TrackCardProps) {
           </div>
 
           {/* 
-            SPECULATIVE PRELOADING: 
-            Mirroring the HeroPlayer pattern, this hidden tag triggers the browser 
-            to pre-fetch the initial chunks of the song. When playback is triggered, 
-            it hits the cache for near-instant start.
+            Only trigger pre-fetching when the card is near the viewport or hovered.
+            The '#t=0,5' fragment ensures we only fetch the first 5 seconds to conserve bandwidth.
           */}
-          <audio preload="auto" src={track.audioUrl} className="hidden" />
+          {shouldPreload && (
+            <audio src={`${track.audioUrl}#t=0,5`} preload="auto" muted className="hidden" />
+          )}
         </motion.div>
       </Link>
     </Magnetic>
