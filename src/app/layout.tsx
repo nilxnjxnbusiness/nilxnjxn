@@ -8,6 +8,7 @@ import { SmoothScroll } from '@/components/layout/SmoothScroll';
 import { CursorFollower } from '@/components/ui/CursorFollower';
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { GoogleAnalytics } from '@/components/Analytics';
 
 const functional = Inter({
   subsets: ['latin'],
@@ -117,6 +118,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <main className="min-h-[calc(100vh-80px)] flex-1">{children}</main>
           </PageTransition>
           <Footer />
+          <GoogleAnalytics />
           <Analytics />
           <SpeedInsights />
           <WaveformPlayer />
