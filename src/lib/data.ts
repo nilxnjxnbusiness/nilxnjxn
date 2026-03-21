@@ -56,7 +56,7 @@ export async function getTracks(): Promise<Track[]> {
       artist: 'NILXNJXN',
       coverUrl: `/cover-arts/${file}`,
       audioUrl,
-      price: '₹150',
+      price: '₹49',
       slug: rawTitle.toLowerCase(),
       season,
     };

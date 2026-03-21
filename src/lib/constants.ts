@@ -4,7 +4,7 @@ export const FEATURED_TRACK = {
   title: 'AKAD',
   audioUrl: '/preview/akad.m4a',
   coverUrl: '/cover-arts/AKAD-COVER.jpg',
-  price: '₹150',
-  duration: '3:45',
+  price: '₹49',
+  duration: '0:30',
   slug: 'akad',
 };
