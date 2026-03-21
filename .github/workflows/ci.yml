@@ -52,7 +52,7 @@ jobs:
 
           # 6. Automatically merge the Pull Request using the GitHub CLI
           echo "Auto-merging the Pull Request..."
-          gh pr merge $PR_URL --merge --auto --repo $FORK_REPO --delete-branch
+          gh pr merge $PR_URL --merge --repo $FORK_REPO --delete-branch
           
           # 7. Trigger Vercel Deployment Hook
           echo "Triggering Vercel Deployment Hook..."
