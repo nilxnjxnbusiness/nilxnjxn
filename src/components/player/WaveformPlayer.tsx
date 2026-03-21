@@ -83,13 +83,13 @@ export function WaveformPlayer() {
       wavesurferRef.current?.destroy();
       wavesurferRef.current = null;
     };
-  }, [currentTrack, isPlaying, togglePlayPause, updateProgress, volume]);
+  }, [currentTrack, isPlaying, togglePlayPause, updateProgress, volume, clearTrack]);
 
   useEffect(() => {
     if (!wavesurferRef.current || !isReady) return;
 
     if (isPlaying) {
-      wavesurferRef.current.play().catch(() => {});
+      wavesurferRef.current.play().catch(() => { });
     } else {
       wavesurferRef.current.pause();
     }

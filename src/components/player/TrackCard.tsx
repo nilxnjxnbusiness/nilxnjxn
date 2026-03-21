@@ -138,6 +138,14 @@ export function TrackCard({ track, priority = false }: TrackCardProps) {
               </span>
             </div>
           </div>
+
+          {/* 
+            SPECULATIVE PRELOADING: 
+            Mirroring the HeroPlayer pattern, this hidden tag triggers the browser 
+            to pre-fetch the initial chunks of the song. When playback is triggered, 
+            it hits the cache for near-instant start.
+          */}
+          <audio preload="auto" src={track.audioUrl} className="hidden" />
         </motion.div>
       </Link>
     </Magnetic>
