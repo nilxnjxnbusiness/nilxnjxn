@@ -118,7 +118,7 @@ export function HeroPlayer({ track, onPlay, hasInteracted }: HeroPlayerProps) {
               key="identity-reveal"
               className="space-y-4 px-4 text-center translate-y-8 md:translate-y-12"
             >
-              <h1 className="font-expressive text-5xl leading-tight tracking-normal text-white mix-blend-difference drop-shadow-2xl sm:text-6xl md:text-[7rem] lg:text-[9rem]">
+              <h1 className="font-expressive text-4xl leading-tight tracking-normal text-white mix-blend-difference drop-shadow-2xl sm:text-5xl md:text-[6rem] lg:text-[8rem]">
                 {'NILXNJXN'.split('').map((char, i) => (
                   <motion.span
                     key={i}
