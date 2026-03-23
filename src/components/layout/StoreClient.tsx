@@ -31,7 +31,7 @@ export function StoreClient({ tracks }: StoreClientProps) {
           </motion.div>
 
           <div className="space-y-4">
-            <h1 className="font-expressive text-5xl leading-tight tracking-normal text-white md:text-8xl">
+            <h1 className="font-expressive mb-8 text-4xl leading-tight tracking-normal text-white md:text-7xl">
               Direct Outlet
             </h1>
             <p className="font-functional mx-auto max-w-2xl text-[10px] leading-loose tracking-[0.3em] text-white/40 uppercase md:text-sm md:tracking-[0.5em]">

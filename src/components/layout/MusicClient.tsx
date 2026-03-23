@@ -47,7 +47,7 @@ export function MusicClient({ tracks }: MusicClientProps) {
             <motion.h1
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
-              className="font-expressive text-2xl tracking-normal text-white md:text-4xl lg:text-5xl"
+              className="font-expressive mb-8 text-2xl tracking-normal text-white md:text-4xl lg:text-5xl"
             >
               The Archive
             </motion.h1>
