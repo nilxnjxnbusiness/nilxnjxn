@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import {
   InstagramIcon,
   SpotifyIcon,
@@ -10,6 +13,7 @@ import {
 } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { Magnetic } from '@/components/ui/Magnetic';
+import { subscribeNewsletter } from '@/app/actions/newsletter';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -74,6 +78,29 @@ const legalLinks = [
 ];
 
 export function Footer() {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [message, setMessage] = useState('');
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+
+    setStatus('loading');
+    const result = await subscribeNewsletter({ email });
+
+    if (result.success) {
+      setStatus('success');
+      setMessage('Welcome to the inner circle!');
+      setEmail('');
+      setTimeout(() => setStatus('idle'), 3000);
+    } else {
+      setStatus('error');
+      setMessage(result.error || 'Failed to subscribe');
+      setTimeout(() => setStatus('idle'), 3000);
+    }
+  };
+
   return (
     <footer
       id="site-footer"
@@ -149,16 +176,33 @@ export function Footer() {
           <p className="text-muted-foreground font-functional text-sm font-light">
             Receive updates on secret releases and private events.
           </p>
-          <div className="group relative">
+          <form onSubmit={handleSubscribe} className="group relative">
             <input
               type="email"
               placeholder="Email address"
-              className="font-functional focus:ring-accent/50 w-full rounded-full border border-white/10 bg-white/5 px-6 py-3 text-xs text-white transition-all focus:ring-1 focus:outline-hidden"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={status === 'loading'}
+              className="font-functional focus:ring-accent/50 w-full rounded-full border border-white/10 bg-white/5 px-6 py-3 text-xs text-white transition-all focus:ring-1 focus:outline-hidden disabled:opacity-50"
+              required
             />
-            <button className="absolute top-1/2 right-2 -translate-y-1/2 rounded-full bg-white px-4 py-1.5 text-[9px] font-bold tracking-widest text-black uppercase transition-all hover:scale-105">
-              Join
+            <button
+              type="submit"
+              disabled={status === 'loading' || !email}
+              className="absolute top-1/2 right-2 -translate-y-1/2 rounded-full bg-white px-4 py-1.5 text-[9px] font-bold tracking-widest text-black uppercase transition-all hover:scale-105 disabled:scale-100 disabled:opacity-50"
+            >
+              {status === 'loading' ? 'Joining...' : 'Join'}
             </button>
-          </div>
+            {message && (
+              <p
+                className={`font-functional mt-2 text-[9px] tracking-widest uppercase ${
+                  status === 'success' ? 'text-accent' : 'text-red-400'
+                }`}
+              >
+                {message}
+              </p>
+            )}
+          </form>
         </div>
       </div>
 

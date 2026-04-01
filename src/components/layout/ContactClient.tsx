@@ -44,12 +44,17 @@ export function ContactClient() {
           className: 'font-functional text-xs font-bold tracking-widest uppercase',
         });
         reset();
+      } else if (response.error && typeof response.error === 'string') {
+        toast.error(response.error, {
+          className: 'font-functional text-xs font-bold tracking-widest uppercase',
+        });
       } else {
         toast.error('Failed to send message. Please try again.', {
           className: 'font-functional text-xs font-bold tracking-widest uppercase',
         });
       }
-    } catch {
+    } catch (err) {
+      console.error('Contact form error:', err);
       toast.error('An unexpected error occurred.', {
         className: 'font-functional text-xs font-bold tracking-widest uppercase',
       });

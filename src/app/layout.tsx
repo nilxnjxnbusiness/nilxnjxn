@@ -73,6 +73,37 @@ export const metadata = {
       'max-snippet': -1,
     },
   },
+  icons: {
+    icon: '/favicons/favicon.ico',
+    shortcut: '/favicons/favicon-16x16.png',
+    apple: '/favicons/apple-icon-180x180.png',
+    other: [
+      {
+        rel: 'icon',
+        url: '/favicons/favicon-32x32.png',
+        sizes: '32x32',
+        type: 'image/png',
+      },
+      {
+        rel: 'icon',
+        url: '/favicons/favicon-96x96.png',
+        sizes: '96x96',
+        type: 'image/png',
+      },
+      {
+        rel: 'apple-touch-icon',
+        url: '/favicons/apple-icon-144x144.png',
+        sizes: '144x144',
+        type: 'image/png',
+      },
+      {
+        rel: 'apple-touch-icon',
+        url: '/favicons/apple-icon-152x152.png',
+        sizes: '152x152',
+        type: 'image/png',
+      },
+    ],
+  },
 };
 
 const jsonLd = {

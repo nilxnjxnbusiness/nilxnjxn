@@ -49,7 +49,7 @@ export function Header() {
       >
         <div
           className={cn(
-            'mx-auto flex max-w-7xl items-center justify-between rounded-full px-6 transition-all duration-500',
+            'flex w-full items-center justify-between rounded-full px-3 sm:px-6 lg:px-12 transition-all duration-500',
             isScrolled
               ? 'border border-white/10 bg-black/40 py-3 shadow-[0_20px_50px_rgba(0,0,0,0.3)] backdrop-blur-2xl'
               : 'bg-transparent py-0',
@@ -79,7 +79,7 @@ export function Header() {
               <Magnetic key={link.href} strength={0.2}>
                 <Link
                   href={link.href}
-                  className="font-functional relative px-1 py-2 text-xs tracking-widest uppercase transition-colors hover:text-white"
+                  className="font-functional relative px-1 py-2 text-xs sm:text-sm md:text-base tracking-widest uppercase transition-colors hover:text-white"
                 >
                   <span
                     className={cn(
@@ -102,7 +102,7 @@ export function Header() {
             <Magnetic strength={0.3}>
               <Link
                 href="/store"
-                className="rounded-full bg-white px-6 py-2 text-[10px] font-bold tracking-widest text-black uppercase shadow-lg shadow-white/10 transition-all hover:scale-105 active:scale-95"
+                className="rounded-full bg-white px-6 py-2 text-[10px] sm:text-xs md:text-sm font-bold tracking-widest text-black uppercase shadow-lg shadow-white/10 transition-all hover:scale-105 active:scale-95"
               >
                 Store
               </Link>

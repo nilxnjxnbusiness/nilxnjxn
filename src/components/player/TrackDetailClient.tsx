@@ -185,34 +185,6 @@ export function TrackDetailClient({ track }: TrackDetailClientProps) {
               </Magnetic>
             </div>
           </div>
-
-          {/* Metadata Grid */}
-          <div className="reveal mx-auto grid max-w-lg grid-cols-2 gap-6 border-t border-white/5 pt-8 md:grid-cols-3 md:gap-8 md:pt-12 lg:mx-0 lg:max-w-none">
-            <div className="space-y-1">
-              <span className="text-muted-foreground text-[9px] tracking-widest uppercase md:text-[10px]">
-                Format
-              </span>
-              <p className="font-functional text-[10px] tracking-wider text-white md:text-xs">
-                24-bit WAV
-              </p>
-            </div>
-            <div className="space-y-1">
-              <span className="text-muted-foreground text-[9px] tracking-widest uppercase md:text-[10px]">
-                Released
-              </span>
-              <p className="font-functional text-[10px] tracking-wider text-white md:text-xs">
-                March 2026
-              </p>
-            </div>
-            <div className="space-y-1">
-              <span className="text-muted-foreground text-[9px] tracking-widest uppercase md:text-[10px]">
-                License
-              </span>
-              <p className="font-functional text-[10px] tracking-wider text-white md:text-xs">
-                Personal
-              </p>
-            </div>
-          </div>
         </div>
       </div>
 

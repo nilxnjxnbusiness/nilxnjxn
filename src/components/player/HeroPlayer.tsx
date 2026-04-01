@@ -71,7 +71,7 @@ export function HeroPlayer({ track, onPlay, hasInteracted }: HeroPlayerProps) {
   return (
     <section
       ref={containerRef}
-      className="relative flex h-screen flex-col items-center justify-center overflow-hidden"
+      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden pt-20"
     >
       {/* 
         PRELOADING TRICK: 
@@ -99,7 +99,7 @@ export function HeroPlayer({ track, onPlay, hasInteracted }: HeroPlayerProps) {
       <div className="from-background to-background/90 absolute inset-0 z-10 bg-linear-to-b via-transparent" />
 
       {/* Centered Play Core */}
-      <div className="relative z-20 flex flex-col items-center justify-center gap-12 pb-24 md:pb-32">
+      <div className="relative z-20 flex flex-col items-center justify-center gap-12 pb-24 md:pb-32 md:gap-16 lg:gap-20">
         <AnimatePresence mode="wait">
           {!hasInteracted ? (
             <motion.div
@@ -109,7 +109,7 @@ export function HeroPlayer({ track, onPlay, hasInteracted }: HeroPlayerProps) {
               exit={{ opacity: 0, scale: 0.8 }}
               className="space-y-4 text-center"
             >
-              <h2 className="font-functional text-[10px] font-bold tracking-[0.6em] text-white/60 uppercase">
+              <h2 className="font-functional text-[10px] font-bold tracking-[0.6em] text-white/60 uppercase sm:text-xs md:text-sm lg:text-base">
                 Enter the shades
               </h2>
             </motion.div>

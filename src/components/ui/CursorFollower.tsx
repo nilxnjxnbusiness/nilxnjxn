@@ -57,7 +57,7 @@ export function CursorFollower() {
   }, []);
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-9999 hidden overflow-hidden transition-opacity duration-500 lg:block">
+    <div className="pointer-events-none fixed inset-0 z-[9999] hidden overflow-hidden transition-opacity duration-500 lg:block">
       {/* Center Icon (The Note) */}
       <div ref={followerRef} className="text-accent absolute top-0 left-0 -mt-2 -ml-2">
         <HugeiconsIcon icon={MusicNote01Icon} size={16} />

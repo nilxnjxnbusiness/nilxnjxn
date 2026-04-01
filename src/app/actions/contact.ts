@@ -2,6 +2,10 @@
 
 import { Resend } from 'resend';
 import { z } from 'zod';
+import {
+  generateContactNotificationEmail,
+  generateContactConfirmationEmail,
+} from '@/lib/emailTemplates';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -20,33 +24,46 @@ export async function sendContactEmail(formData: ContactFormData) {
     return { error: result.error.flatten().fieldErrors };
   }
 
-  try {
-    const { data, error } = await resend.emails.send({
-      from: 'NILXNJXN Contact <onboarding@resend.dev>',
-      to: [process.env.NEXT_PUBLIC_CONTACT_EMAIL as string],
-      subject: `New Message from ${formData.name}`,
-      html: `
-        <div style="font-family: sans-serif; padding: 20px; color: #333;">
-          <h2 style="color: #000;">New Contact Form Submission</h2>
-          <p><strong>Name:</strong> ${formData.name}</p>
-          <p><strong>Email:</strong> ${formData.email}</p>
-          <p><strong>Message:</strong></p>
-          <div style="background: #f4f4f4; padding: 15px; border-radius: 8px;">
-            ${formData.message.replace(/\n/g, '<br/>')}
-          </div>
-        </div>
-      `,
-    });
+  const { name, email, message } = result.data;
+  const idempotencyKey = `contact-form/${email}/${Date.now()}`;
 
-    if (error) {
-      console.error('Resend Error:', error);
+  try {
+    // Send notification to admin
+    const { error: notificationError } = await resend.emails.send(
+      {
+        from: 'NILXNJXN Contact <onboarding@resend.dev>',
+        to: [process.env.NEXT_PUBLIC_CONTACT_EMAIL as string],
+        subject: `New Message from ${name}`,
+        html: generateContactNotificationEmail({ name, email, message }),
+      },
+      { idempotencyKey: `${idempotencyKey}/admin` }
+    );
+
+    if (notificationError) {
+      console.error('Admin notification error:', notificationError);
       return { error: 'Failed to send message. Please try again later.' };
     }
 
-    console.log('Email sent successfully:', data?.id);
+    // Send confirmation to user
+    const { error: confirmationError } = await resend.emails.send(
+      {
+        from: 'NILXNJXN <onboarding@resend.dev>',
+        to: [email],
+        subject: 'We Got Your Message',
+        html: generateContactConfirmationEmail(name),
+      },
+      { idempotencyKey: `${idempotencyKey}/user` }
+    );
+
+    if (confirmationError) {
+      console.error('Confirmation email error:', confirmationError);
+      // Still return success since admin got the message
+    }
+
+    console.log('Contact form emails sent successfully');
     return { success: true };
   } catch (err) {
-    console.error('Server Action Error:', err);
+    console.error('Contact Server Action Error:', err);
     return { error: 'An unexpected error occurred.' };
   }
 }
