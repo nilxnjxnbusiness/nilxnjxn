@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { toast } from 'sonner';
 import {
   InstagramIcon,
   SpotifyIcon,
@@ -79,25 +80,35 @@ const legalLinks = [
 
 export function Footer() {
   const [email, setEmail] = useState('');
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
+    if (!email.trim()) {
+      toast.error('Please enter your email');
+      return;
+    }
 
-    setStatus('loading');
-    const result = await subscribeNewsletter({ email });
+    setIsLoading(true);
 
-    if (result.success) {
-      setStatus('success');
-      setMessage('Welcome to the inner circle!');
-      setEmail('');
-      setTimeout(() => setStatus('idle'), 3000);
-    } else {
-      setStatus('error');
-      setMessage(result.error || 'Failed to subscribe');
-      setTimeout(() => setStatus('idle'), 3000);
+    try {
+      const result = await subscribeNewsletter({ email });
+
+      if (result.success) {
+        toast.success(result.message || "You're in. Welcome to the inner circle.");
+        setEmail(''); // Reset input
+      } else if (result.error === 'duplicate') {
+        toast.info(result.message || "You're already part of the circle.");
+      } else if (result.error === 'ratelimit') {
+        toast.warning(result.message || 'Please wait before trying again.');
+      } else {
+        toast.error(result.message || 'Failed to subscribe. Please try again.');
+      }
+    } catch (err) {
+      console.error('Newsletter error:', err);
+      toast.error('An unexpected error occurred.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -182,26 +193,17 @@ export function Footer() {
               placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              disabled={status === 'loading'}
+              disabled={isLoading}
               className="font-functional focus:ring-accent/50 w-full rounded-full border border-white/10 bg-white/5 px-6 py-3 text-xs text-white transition-all focus:ring-1 focus:outline-hidden disabled:opacity-50"
               required
             />
             <button
               type="submit"
-              disabled={status === 'loading' || !email}
+              disabled={isLoading || !email.trim()}
               className="absolute top-1/2 right-2 -translate-y-1/2 rounded-full bg-white px-4 py-1.5 text-[9px] font-bold tracking-widest text-black uppercase transition-all hover:scale-105 disabled:scale-100 disabled:opacity-50"
             >
-              {status === 'loading' ? 'Joining...' : 'Join'}
+              {isLoading ? 'Joining...' : 'Join'}
             </button>
-            {message && (
-              <p
-                className={`font-functional mt-2 text-[9px] tracking-widest uppercase ${
-                  status === 'success' ? 'text-accent' : 'text-red-400'
-                }`}
-              >
-                {message}
-              </p>
-            )}
           </form>
         </div>
       </div>

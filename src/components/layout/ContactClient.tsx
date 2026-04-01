@@ -40,16 +40,22 @@ export function ContactClient() {
     try {
       const response = await sendContactEmail(data);
       if (response.success) {
-        toast.success('Message sent. You\'ll hear back soon.', {
+        toast.success(response.message || 'Message sent! We got it and will get back to you soon.', {
           className: 'font-functional text-xs font-bold tracking-widest uppercase',
         });
         reset();
-      } else if (response.error && typeof response.error === 'string') {
-        toast.error(response.error, {
+      } else if (response.error === 'ratelimit') {
+        toast.warning(response.message || 'You already submitted a message. Please wait 24 hours.', {
+          className: 'font-functional text-xs font-bold tracking-widest uppercase',
+        });
+      } else if (typeof response.error === 'object' && response.error !== null) {
+        // Zod field errors
+        const firstError = Object.values(response.error).flat()[0];
+        toast.error((firstError as string) || 'Please check your form and try again.', {
           className: 'font-functional text-xs font-bold tracking-widest uppercase',
         });
       } else {
-        toast.error('Failed to send message. Please try again.', {
+        toast.error(response.error || 'Failed to send message. Please try again.', {
           className: 'font-functional text-xs font-bold tracking-widest uppercase',
         });
       }

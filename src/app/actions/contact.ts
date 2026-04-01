@@ -6,6 +6,7 @@ import {
   generateContactNotificationEmail,
   generateContactConfirmationEmail,
 } from '@/lib/emailTemplates';
+import { canSubmitContact, recordContactSubmission } from '@/lib/redis';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -25,7 +26,18 @@ export async function sendContactEmail(formData: ContactFormData) {
   }
 
   const { name, email, message } = result.data;
-  const idempotencyKey = `contact-form/${email}/${Date.now()}`;
+  const normalizedEmail = email.toLowerCase().trim();
+
+  // Check if already submitted recently (24-hour cooldown)
+  const canSubmit = await canSubmitContact(normalizedEmail);
+  if (!canSubmit.allowed) {
+    return {
+      error: 'ratelimit',
+      message: 'You already submitted a message. Please wait 24 hours.',
+    };
+  }
+
+  const idempotencyKey = `contact-form/${normalizedEmail}/${Date.now()}`;
 
   try {
     // Send notification to admin
@@ -34,21 +46,21 @@ export async function sendContactEmail(formData: ContactFormData) {
         from: 'NILXNJXN Contact <no-reply@nilxnjxn.com>',
         to: [process.env.NEXT_PUBLIC_CONTACT_EMAIL as string],
         subject: `New Message from ${name}`,
-        html: generateContactNotificationEmail({ name, email, message }),
+        html: generateContactNotificationEmail({ name, email: normalizedEmail, message }),
       },
       { idempotencyKey: `${idempotencyKey}/admin` }
     );
 
     if (notificationError) {
       console.error('Admin notification error:', notificationError);
-      return { error: 'Failed to send message. Please try again later.' };
+      return { error: 'send', message: 'Failed to send message. Please try again later.' };
     }
 
     // Send confirmation to user
     const { error: confirmationError } = await resend.emails.send(
       {
         from: 'NILXNJXN <no-reply@nilxnjxn.com>',
-        to: [email],
+        to: [normalizedEmail],
         subject: 'We Got Your Message',
         html: generateContactConfirmationEmail(name),
       },
@@ -60,10 +72,13 @@ export async function sendContactEmail(formData: ContactFormData) {
       // Still return success since admin got the message
     }
 
+    // Record submission for cooldown
+    await recordContactSubmission(normalizedEmail);
+
     console.log('Contact form emails sent successfully');
-    return { success: true };
+    return { success: true, message: 'Message sent! We got it and will get back to you soon.' };
   } catch (err) {
     console.error('Contact Server Action Error:', err);
-    return { error: 'An unexpected error occurred.' };
+    return { error: 'server', message: 'An unexpected error occurred.' };
   }
 }
