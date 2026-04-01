@@ -138,11 +138,14 @@ export function TrackDetailClient({ track }: TrackDetailClientProps) {
               Shade: {track.season}
             </div>
 
-            <motion.h1 className="reveal font-expressive text-6xl leading-tight tracking-normal text-white md:text-8xl lg:text-9xl">
-              {track.title}
-            </motion.h1>
+            <div className="reveal space-y-3">
+              <motion.h1
+                className="font-expressive leading-tight tracking-normal text-white max-w-2xl break-words"
+                style={{ fontSize: 'clamp(48px, 12vw, 128px)' }}
+              >
+                {track.title}
+              </motion.h1>
 
-            <div className="reveal space-y-2">
               <p className="font-functional text-xl tracking-widest text-white/40 uppercase italic md:text-2xl">
                 {track.artist}
               </p>

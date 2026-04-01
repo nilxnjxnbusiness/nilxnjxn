@@ -1,4 +1,6 @@
 import './globals.css';
+
+
 import { Inter, Rock_Salt } from 'next/font/google';
 
 import { WaveformPlayer } from '@/components/player/WaveformPlayer';
@@ -9,6 +11,7 @@ import { CursorFollower } from '@/components/ui/CursorFollower';
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { GoogleAnalytics } from '@/components/Analytics';
+import { Toaster } from 'sonner';
 
 const functional = Inter({
   subsets: ['latin'],
@@ -34,7 +37,7 @@ export const metadata = {
     template: '%s | NILXNJXN',
   },
   description:
-    'Official platform for Nilxnjxn aka Nila. Upcoming Hip-hop wave from Assam, India. Debut EP SHADES dropping 2026. LIVE FREE, BE YOU.',
+    'Official platform for Nilxnjxn aka Nila. Hip-hop wave from Assam, India. Debut EP SHADES dropping 2026. LIVE FREE, BE YOU.',
   keywords: [
     'Nilxnjxn',
     'Nila',
@@ -156,7 +159,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <WaveformPlayer />
           <CursorFollower />
         </SmoothScroll>
-        
+        <Toaster position="top-right" theme="dark" />
+
         {/* Chatbase AI Chatbot */}
         <Script id="chatbase-init" strategy="afterInteractive">
           {`(function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="${process.env.NEXT_PUBLIC_nilxnjxn_CHATBOT_ID}";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();`}
