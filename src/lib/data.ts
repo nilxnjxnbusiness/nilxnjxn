@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { get } from '@vercel/edge-config';
+import { getCatalogItems, type CatalogItem } from '@/lib/db/d1-client';
 
 export interface Track {
   id: string;
@@ -13,26 +13,43 @@ export interface Track {
   slug?: string;
   season?: 'FRESH' | 'AKAD' | 'LATE';
   album?: string;
+  r2DownloadKey?: string;
 }
 
 // Simple in-memory cache for track data to improve TTFB
 let tracksCache: Track[] | null = null;
 
+function catalogItemToTrack(item: CatalogItem): Track {
+  return {
+    id: item.id,
+    title: item.title,
+    artist: item.artist,
+    audioUrl: item.preview_url || '',
+    coverUrl: item.cover_url,
+    price: item.price,
+    slug: item.slug,
+    season: item.season || undefined,
+    r2DownloadKey: item.r2_download_key,
+  };
+}
+
 export async function getTracks(): Promise<Track[]> {
   if (tracksCache) return tracksCache;
 
+  // 1. Primary: Fetch from Cloudflare D1 via REST Worker
   try {
-    const edgeTracks = await get<Track[]>('tracks');
-    if (edgeTracks && Array.isArray(edgeTracks) && edgeTracks.length > 0) {
-      console.log('Fetched tracks from Vercel Edge Config');
-      tracksCache = edgeTracks;
-      return edgeTracks;
+    const catalogItems = await getCatalogItems();
+    if (catalogItems.length > 0) {
+      console.log(`Fetched ${catalogItems.length} catalog items from D1`);
+      const tracks = catalogItems.map(catalogItemToTrack);
+      tracksCache = tracks;
+      return tracks;
     }
   } catch (err) {
-    console.warn('Edge Config not available or empty, falling back to filesystem.', err);
+    console.warn('D1 catalog fetch failed, falling back to filesystem.', err);
   }
 
-  // 2. Local Filesystem Fallback (Solid for local dev or if Edge is not linked)
+  // 2. Local Filesystem Fallback (Solid for local dev or if D1 is unreachable)
   const publicPath = path.join(process.cwd(), 'public');
   const dirPath = path.join(publicPath, 'cover-arts');
   

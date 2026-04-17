@@ -54,6 +54,20 @@ export interface Order {
   updated_at: string;
 }
 
+export interface CatalogItem {
+  id: string;
+  title: string;
+  item_type: 'song' | 'album';
+  artist: string;
+  cover_url: string;
+  preview_url: string | null;
+  r2_download_key: string;
+  price: string;
+  season: 'FRESH' | 'AKAD' | 'LATE' | null;
+  slug: string;
+  created_at: string;
+}
+
 export async function getUserByEmail(email: string): Promise<User | null> {
   const users = await queryD1<User>('SELECT * FROM users WHERE email = ?', [email]);
   return users[0] ?? null;
@@ -102,4 +116,25 @@ export async function getPaidOrderByEmailAndTracking(email: string, trackingCode
   `;
   const orders = await queryD1<Order>(query, [email, trackingCode]);
   return orders[0] ?? null;
+}
+
+export async function getCatalogItems(): Promise<CatalogItem[]> {
+  return await queryD1<CatalogItem>('SELECT * FROM catalogs ORDER BY created_at DESC');
+}
+
+export async function getCatalogItemById(id: string): Promise<CatalogItem | null> {
+  const items = await queryD1<CatalogItem>('SELECT * FROM catalogs WHERE id = ?', [id]);
+  return items[0] ?? null;
+}
+
+export async function createCatalogItem(item: Omit<CatalogItem, 'created_at'>): Promise<void> {
+  await queryD1(
+    `INSERT INTO catalogs (id, title, item_type, artist, cover_url, preview_url, r2_download_key, price, season, slug) 
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [item.id, item.title, item.item_type, item.artist, item.cover_url, item.preview_url, item.r2_download_key, item.price, item.season, item.slug]
+  );
+}
+
+export async function deleteCatalogItem(id: string): Promise<void> {
+  await queryD1('DELETE FROM catalogs WHERE id = ?', [id]);
 }

@@ -1,7 +1,7 @@
 import { S3Client, GetObjectCommand, ListObjectsV2Command } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import { Resend } from "resend"
-import { getTracks } from "@/lib/data"
+import { getCatalogItemById } from "@/lib/db/d1-client"
 
 const s3Client = new S3Client({
   region: "auto",
@@ -17,14 +17,20 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 export async function generateDownloadLink(trackId: string): Promise<string> {
   const bucket = process.env.STORAGE_BUCKET_NAME || "AUDIO-FILES";
   
-  const tracks = await getTracks();
-  const resolvedTrack = tracks.find(t => t.id === trackId);
-  const albumFolder = (resolvedTrack?.album || "shades").toLowerCase();
+  // 1. Try exact key lookup from D1 catalog (preferred — no guessing)
+  const catalogItem = await getCatalogItemById(trackId);
+  if (catalogItem?.r2_download_key) {
+    const command = new GetObjectCommand({
+      Bucket: bucket,
+      Key: catalogItem.r2_download_key,
+    });
+    return await getSignedUrl(s3Client, command, { expiresIn: 7200 });
+  }
 
-  // Since audio can be .wav, .mp3, or a .zip of an album, we list objects to find the exact key
+  // 2. Fallback: List objects by prefix (legacy tracks without r2_download_key)
   const listCommand = new ListObjectsV2Command({
     Bucket: bucket,
-    Prefix: `${albumFolder}/${trackId}.`, 
+    Prefix: `shades/${trackId}.`, 
   });
 
   const listData = await s3Client.send(listCommand);

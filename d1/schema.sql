@@ -1,6 +1,21 @@
 DROP TABLE IF EXISTS audit_logs;
 DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS catalogs;
+
+CREATE TABLE catalogs (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    item_type TEXT NOT NULL,
+    artist TEXT DEFAULT 'NILXNJXN',
+    cover_url TEXT NOT NULL,
+    preview_url TEXT,
+    r2_download_key TEXT NOT NULL,
+    price TEXT NOT NULL,
+    season TEXT,
+    slug TEXT UNIQUE NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
 
 CREATE TABLE users (
     id TEXT PRIMARY KEY,
