@@ -86,14 +86,14 @@ export default function AboutPage() {
               </div>
 
               <p className="text-muted-foreground text-base font-light">
-                Debut EP{' '}
+                Debut Album{' '}
                 <span className="decoration-accent/30 font-medium text-white italic underline underline-offset-8">
                   &quot;SHADES&quot;
                 </span>{' '}
-                (Dropping 2026) explores the range of Human Emotion and Behavior, reflected through
-                the seasons. 3 SHADES — <span className="text-emerald-400">FRESH</span>;{' '}
+                (Released 2026) explores the range of Human Emotion and Behavior, reflected through
+                the seasons. All 3 SHADES — <span className="text-emerald-400">FRESH</span>;{' '}
                 <span className="text-orange-400">AKAD</span>;{' '}
-                <span className="text-cyan-400">LATE</span> — have already emerged.
+                <span className="text-cyan-400">LATE</span> — are officially out now.
               </p>
             </div>
 

@@ -37,13 +37,13 @@ export const metadata = {
     template: '%s | NILXNJXN',
   },
   description:
-    'Official platform for Nilxnjxn aka Nila. Hip-hop wave from Assam, India. Debut EP SHADES dropping 2026. LIVE FREE, BE YOU.',
+    'Official platform for Nilxnjxn aka Nila. Hip-hop wave from Assam, India. Debut Album SHADES — Out Now. LIVE FREE, BE YOU.',
   keywords: [
     'Nilxnjxn',
     'Nila',
     'Assam Hip-hop',
     'Indian Rap',
-    'SHADES EP',
+    'SHADES Album',
     'Independent Music',
     'Direct Distribution',
   ],
@@ -55,7 +55,7 @@ export const metadata = {
     url: 'https://nilxnjxn.com',
     title: 'NILXNJXN | Hip-hop Artist from Assam',
     description:
-      'Official artist platform. Explore the sound of Nila. Debut EP SHADES coming 2026.',
+      'Official artist platform. Explore the sound of Nila. Debut Album SHADES — Out Now.',
     siteName: 'NILXNJXN',
   },
   twitter: {

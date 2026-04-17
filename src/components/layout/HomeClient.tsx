@@ -117,8 +117,8 @@ export function HomeClient({ tracks }: HomeClientProps) {
                   <div className="shade-title space-y-8">
                     <div className="h-px w-full bg-white/10" />
                     <p className="text-muted-foreground font-functional text-sm leading-8">
-                      The debut EP &apos;SHADES&apos; is a seasonal mapping of the human psyche.
-                      Dropping 2026, it serves as a digital monolith to the journey of Nila — from
+                      The debut album &apos;SHADES&apos; is a seasonal mapping of the human psyche.
+                      Released 2026, it serves as a digital monolith to the journey of Nila — from
                       the valleys of Assam to the global digital frontier.
                     </p>
                     <div className="pt-8">
