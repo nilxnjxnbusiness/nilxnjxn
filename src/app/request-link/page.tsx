@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Rock_Salt } from 'next/font/google';
 import { HugeiconsIcon } from '@hugeicons/react';
@@ -139,13 +140,13 @@ export default function RequestLinkPage() {
               </button>
             </Magnetic>
 
-            <a
+            <Link
               href="/"
               className="font-functional mx-auto flex w-fit items-center gap-3 rounded-full border border-white/10 bg-transparent px-6 py-3 text-[10px] tracking-[0.2em] text-white/50 uppercase transition-all hover:text-white"
             >
               <HugeiconsIcon icon={ArrowLeft02Icon} size={14} />
               Back to Store
-            </a>
+            </Link>
           </motion.form>
         )}
       </motion.div>
