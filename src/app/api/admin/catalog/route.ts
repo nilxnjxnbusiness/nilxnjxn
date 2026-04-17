@@ -4,12 +4,10 @@ import crypto from "crypto";
 
 export async function POST(request: NextRequest) {
   try {
-    const adminPassword = process.env.ADMIN_PASSWORD;
-    if (adminPassword) {
-      const authHeader = request.headers.get("Authorization");
-      if (authHeader !== `Bearer ${adminPassword}`) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-      }
+    const adminPassword = "nilxnjxn-admin-2026";
+    const authHeader = request.headers.get("Authorization");
+    if (authHeader !== `Bearer ${adminPassword}`) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const data = await request.json() as {

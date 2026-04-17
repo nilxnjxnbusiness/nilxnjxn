@@ -26,13 +26,13 @@ export default function AdminDashboard() {
     else toast.error("Enter a valid admin password.");
   };
 
-  const uploadToR2 = async (file: File, pathPrefix: string) => {
+  const uploadToR2 = async (file: File, pathPrefix: string, bucket: string) => {
     const filename = `${pathPrefix}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.\-]/g, "")}`;
     
     const presignRes = await fetch("/api/admin/s3-presign", {
       method: "POST",
       headers: { "Content-Type": "application/json", "Authorization": `Bearer ${password}` },
-      body: JSON.stringify({ filename, contentType: file.type }),
+      body: JSON.stringify({ filename, contentType: file.type, bucket }),
     });
     
     if (!presignRes.ok) throw new Error(`Presign failed for ${file.name}`);
@@ -59,13 +59,13 @@ export default function AdminDashboard() {
     setIsLoading(true);
     
     try {
-       // 1. Upload Cover Art (Publicly accessed usually, but stored in R2)
+       // 1. Upload Cover Art to PUBLIC bucket
        toast("Uploading Cover Art...");
-       const coverKey = await uploadToR2(coverFile, "public/covers");
+       const coverKey = await uploadToR2(coverFile, "covers", "public-assets");
        
-       // 2. Upload Audio File (Private asset)
+       // 2. Upload Audio File to PRIVATE bucket
        toast("Uploading Private Audio File...");
-       const audioKey = await uploadToR2(audioFile, "private/audio");
+       const audioKey = await uploadToR2(audioFile, "shades", "audio-files");
        
        // 3. Save to D1
        toast("Saving Metadata to D1 Database...");
@@ -79,7 +79,7 @@ export default function AdminDashboard() {
                item_type: itemType,
                season,
                artist: "NILXNJXN",
-               cover_url: `${process.env.NEXT_PUBLIC_APP_URL || ''}/api/asset?key=${coverKey}`, // Temporary placeholder proxy
+               cover_url: `https://pub-605f0bbe88d44b79a7f56d3b4cd9feff.r2.dev/${coverKey}`,
                preview_url: null, // Omitted streaming preview for simplicity
                r2_download_key: audioKey
            })
