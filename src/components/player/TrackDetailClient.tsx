@@ -17,12 +17,12 @@ interface TrackDetailClientProps {
   track: Track;
 }
 
-import { ComingSoonWall } from '@/components/ui/ComingSoonWall';
+import { CheckoutModal } from '@/components/ui/CheckoutModal';
 import { useState } from 'react';
 
 export function TrackDetailClient({ track }: TrackDetailClientProps) {
   const { currentTrack, isPlaying, playTrack, togglePlayPause } = useAudioStore();
-  const [showComingSoon, setShowComingSoon] = useState(false);
+  const [showCheckout, setShowCheckout] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
 
@@ -140,7 +140,7 @@ export function TrackDetailClient({ track }: TrackDetailClientProps) {
 
             <div className="reveal space-y-3">
               <motion.h1
-                className="font-expressive leading-tight tracking-normal text-white max-w-2xl break-words"
+                className="font-expressive leading-tight tracking-normal text-white max-w-2xl wrap-break-word"
                 style={{ fontSize: 'clamp(48px, 12vw, 128px)' }}
               >
                 {track.title}
@@ -179,7 +179,7 @@ export function TrackDetailClient({ track }: TrackDetailClientProps) {
                 <Button
                   variant="outline"
                   size="lg"
-                  onClick={() => setShowComingSoon(true)}
+                  onClick={() => setShowCheckout(true)}
                   className="font-functional flex h-14 w-full items-center justify-center gap-3 rounded-full border-white/20 bg-transparent px-10 text-xs font-bold tracking-widest text-white uppercase shadow-[0_0_40px_rgba(255,255,255,0.05)] transition-all hover:bg-white hover:text-black sm:w-auto md:h-16 md:text-sm"
                 >
                   <HugeiconsIcon icon={ShoppingCart01Icon} size={18} className="text-current" />
@@ -197,11 +197,10 @@ export function TrackDetailClient({ track }: TrackDetailClientProps) {
       </div>
 
       <AnimatePresence>
-        {showComingSoon && (
-          <ComingSoonWall 
-            onClose={() => setShowComingSoon(false)} 
-            title={track.title}
-            season={track.season}
+        {showCheckout && (
+          <CheckoutModal 
+            onClose={() => setShowCheckout(false)} 
+            track={track}
           />
         )}
       </AnimatePresence>

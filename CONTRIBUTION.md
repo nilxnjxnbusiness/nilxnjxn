@@ -42,6 +42,8 @@ If you are new to this codebase, here are the key technologies we use:
 - **GSAP (GreenSock)**: Used for complex animations, especially everything involving `ScrollTrigger` and physics (Magnetics, Curshors).
 - **Zustand**: A lightweight state management library used for our `audioStore` ensuring music plays uninterrupted across page navigations.
 - **Wavesurfer.js**: Used to generate and control the visual waveforms for each track.
+- **Cloudflare R2**: High-performance, egress-free object storage used to host lossless audio files. Interacted with using S3 compatibility via the `@aws-sdk/client-s3` Node.js package.
+- **Razorpay**: Our frictionless payment gateway. Integrated using the `razorpay` Node.js package for server-side order creation and the Standard Checkout script (`checkout.js`) on the frontend for in-context, frictionless payments.
 
 ---
 
