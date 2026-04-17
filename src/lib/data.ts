@@ -52,7 +52,7 @@ export async function getTracks(): Promise<Track[]> {
   // 2. Local Filesystem Fallback (Solid for local dev or if D1 is unreachable)
   const publicPath = path.join(process.cwd(), 'public');
   const dirPath = path.join(publicPath, 'cover-arts');
-  
+
   let files: string[] = [];
   try {
     if (fs.existsSync(dirPath)) {
@@ -79,7 +79,7 @@ export async function getTracks(): Promise<Track[]> {
     const audioFilePath = path.join(publicPath, 'preview', `${rawTitle.toLowerCase()}.m4a`);
     const audioUrl = fs.existsSync(audioFilePath)
       ? `/preview/${rawTitle.toLowerCase()}.m4a`
-      : 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+      : '';
 
     return {
       id: `trk_${i}`,

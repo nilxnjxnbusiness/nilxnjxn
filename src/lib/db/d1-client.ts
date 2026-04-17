@@ -11,7 +11,7 @@ interface D1WorkerResponse<T> {
 async function queryD1<T = Record<string, unknown>>(sql: string, params: unknown[] = []): Promise<T[]> {
   // Configured to use the deployed Worker URL by default
   const url = process.env.CLOUDFLARE_D1_WORKER_URL || 'https://d1-rest.nilxnjxnbusiness.workers.dev/query';
-  const token = process.env.CLOUDFLARE_D1_WORKER_SECRET || 'fFuhquFS9Cx2j@nilxnjxn';
+  const token = process.env.CLOUDFLARE_D1_WORKER_SECRET || '';
 
   const response = await fetch(url, {
     method: 'POST',
