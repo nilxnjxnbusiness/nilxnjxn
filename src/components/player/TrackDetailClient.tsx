@@ -131,22 +131,22 @@ export function TrackDetailClient({ track }: TrackDetailClientProps) {
         </div>
 
         {/* Right: Narrative & Content */}
-        <div className="space-y-8 text-center md:space-y-12 lg:text-left">
-          <div className="space-y-6">
-            <div className="reveal text-accent inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[9px] font-bold tracking-[0.3em] uppercase md:text-[10px]">
-              <span className="bg-accent h-1.5 w-1.5 animate-pulse rounded-full" />
+        <div className="space-y-10 text-center md:space-y-16 lg:text-left">
+          <div className="space-y-10 md:space-y-14">
+            <div className="reveal text-accent inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-6 py-2.5 text-[10px] font-bold tracking-[0.4em] uppercase md:text-[11px]">
+              <span className="bg-accent h-2 w-2 animate-pulse rounded-full" />
               Shade: {track.season}
             </div>
 
-            <div className="reveal space-y-3">
+            <div className="reveal space-y-6">
               <motion.h1
                 className="font-expressive leading-tight tracking-normal text-white max-w-2xl wrap-break-word"
-                style={{ fontSize: 'clamp(48px, 12vw, 128px)' }}
+                style={{ fontSize: 'clamp(64px, 16vw, 180px)' }}
               >
                 {track.title}
               </motion.h1>
 
-              <p className="font-functional text-xl tracking-widest text-white/40 uppercase italic md:text-2xl">
+              <p className="font-functional text-2xl tracking-[0.5em] text-white/20 uppercase italic md:text-3xl">
                 {track.artist}
               </p>
             </div>
