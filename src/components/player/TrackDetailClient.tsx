@@ -131,29 +131,31 @@ export function TrackDetailClient({ track }: TrackDetailClientProps) {
         </div>
 
         {/* Right: Narrative & Content */}
-        <div className="space-y-10 text-center md:space-y-16 lg:text-left">
-          <div className="space-y-10 md:space-y-14">
-            <div className="reveal text-accent inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-6 py-2.5 text-[10px] font-bold tracking-[0.4em] uppercase md:text-[11px]">
+        <div className="space-y-16 pt-12 text-center md:space-y-24 lg:pt-0 lg:text-left">
+          <div className="space-y-12 md:space-y-16">
+            <div className="reveal inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-[10px] font-bold tracking-[0.4em] text-accent uppercase shadow-2xl backdrop-blur-3xl md:text-[11px]">
               <span className="bg-accent h-2 w-2 animate-pulse rounded-full" />
               Shade: {track.season}
             </div>
 
-            <div className="reveal space-y-6">
+            <div className="reveal space-y-10">
               <motion.h1
-                className="font-expressive leading-tight tracking-normal text-white max-w-2xl wrap-break-word"
-                style={{ fontSize: 'clamp(64px, 16vw, 180px)' }}
+                className="font-expressive leading-[0.85] tracking-tight text-white max-w-2xl"
+                style={{ fontSize: 'clamp(80px, 20vw, 220px)' }}
               >
                 {track.title}
               </motion.h1>
 
-              <p className="font-functional text-2xl tracking-[0.5em] text-white/20 uppercase italic md:text-3xl">
-                {track.artist}
-              </p>
+              <div className="mt-8">
+                <p className="font-functional text-xl tracking-[0.6em] text-white/20 uppercase italic md:text-2xl">
+                  {track.artist}
+                </p>
+              </div>
             </div>
           </div>
 
-          <div className="reveal mx-auto max-w-lg space-y-8 lg:mx-0">
-            <p className="font-functional text-base leading-relaxed text-white/60 md:text-lg">
+          <div className="reveal mx-auto max-w-lg space-y-10 lg:mx-0">
+            <p className="font-functional text-lg leading-relaxed text-white/50 md:text-xl">
               Explore the spectrum of emotion embedded in this frequency. &quot;{track.title}&quot;
               is a direct-to-audience release, capturing the raw essence of the {track.season}{' '}
               season.
