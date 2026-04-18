@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Rock_Salt } from 'next/font/google';
 import { HugeiconsIcon } from '@hugeicons/react';
-import { ArrowLeft02Icon, LockIcon, Mail02Icon } from '@hugeicons/core-free-icons';
+import { ArrowLeft02Icon, LockIcon, Mail02Icon, Ticket01Icon } from '@hugeicons/core-free-icons';
 import { Magnetic } from './Magnetic';
 import { cn } from '@/lib/utils';
 import { Track } from '@/lib/data';
@@ -33,6 +33,7 @@ function loadRazorpayScript() {
 
 export function CheckoutModal({ onClose, track }: CheckoutModalProps) {
   const [email, setEmail] = useState('');
+  const [promoCode, setPromoCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleCheckout = async (e: React.FormEvent) => {
@@ -58,6 +59,7 @@ export function CheckoutModal({ onClose, track }: CheckoutModalProps) {
         body: JSON.stringify({
           email,
           trackId: track.id,
+          promoCode,
           currency: 'INR'
         })
       });
@@ -182,6 +184,18 @@ export function CheckoutModal({ onClose, track }: CheckoutModalProps) {
                     className="w-full rounded-full border border-white/10 bg-white/5 py-4 pl-12 pr-6 font-mono text-[10px] uppercase tracking-widest text-white placeholder:text-white/20 focus:border-white/30 focus:outline-none disabled:opacity-50"
                 />
             </div>
+
+            <div className="relative flex items-center">
+                <HugeiconsIcon icon={Ticket01Icon} size={20} className="absolute left-4 text-white/40" />
+                <input 
+                    type="text" 
+                    disabled={isLoading}
+                    value={promoCode}
+                    onChange={(e) => setPromoCode(e.target.value)}
+                    placeholder="PROMO CODE (OPTIONAL)"
+                    className="w-full rounded-full border border-white/10 bg-white/5 py-4 pl-12 pr-6 font-mono text-[10px] uppercase tracking-widest text-white placeholder:text-white/20 focus:border-white/30 focus:outline-none disabled:opacity-50"
+                />
+            </div>
             
             <Magnetic strength={0.1}>
                 <button
@@ -189,7 +203,7 @@ export function CheckoutModal({ onClose, track }: CheckoutModalProps) {
                     disabled={isLoading}
                     className="font-functional flex w-full items-center justify-center gap-3 rounded-full border border-white/10 bg-white px-8 py-4 text-[10px] font-bold tracking-[0.2em] text-black uppercase transition-all hover:bg-white/90 disabled:opacity-50"
                 >
-                    {isLoading ? "INITIALIZING SECURE LINK..." : `PAY ${track.price} TO UNLOCK`}
+                    {isLoading ? "Processing" : `PAY ${track.price} TO UNLOCK`}
                 </button>
             </Magnetic>
         </motion.form>

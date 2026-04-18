@@ -68,6 +68,14 @@ export interface CatalogItem {
   created_at: string;
 }
 
+export interface PromoCode {
+  code: string;
+  discount_type: 'fixed' | 'percentage';
+  discount_value: number;
+  is_active: number;
+  created_at: string;
+}
+
 export async function getUserByEmail(email: string): Promise<User | null> {
   const users = await queryD1<User>('SELECT * FROM users WHERE email = ?', [email]);
   return users[0] ?? null;
@@ -137,4 +145,24 @@ export async function createCatalogItem(item: Omit<CatalogItem, 'created_at'>): 
 
 export async function deleteCatalogItem(id: string): Promise<void> {
   await queryD1('DELETE FROM catalogs WHERE id = ?', [id]);
+}
+
+export async function getPromoCodes(): Promise<PromoCode[]> {
+  return await queryD1<PromoCode>('SELECT * FROM promo_codes ORDER BY created_at DESC');
+}
+
+export async function getPromoCodeByCode(code: string): Promise<PromoCode | null> {
+  const items = await queryD1<PromoCode>('SELECT * FROM promo_codes WHERE code = ? AND is_active = 1', [code.toUpperCase()]);
+  return items[0] ?? null;
+}
+
+export async function createPromoCode(promo: Omit<PromoCode, 'created_at' | 'is_active'>): Promise<void> {
+  await queryD1(
+    'INSERT INTO promo_codes (code, discount_type, discount_value, is_active) VALUES (?, ?, ?, 1)',
+    [promo.code.toUpperCase(), promo.discount_type, promo.discount_value]
+  );
+}
+
+export async function deletePromoCode(code: string): Promise<void> {
+  await queryD1('DELETE FROM promo_codes WHERE code = ?', [code.toUpperCase()]);
 }

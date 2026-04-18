@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 import crypto from "crypto"
-import { getUserByEmail, createUser, createOrder } from "@/lib/db/d1-client"
+import { getUserByEmail, createUser, createOrder, getPromoCodeByCode } from "@/lib/db/d1-client"
 import { getTracks } from "@/lib/data"
 
 const createOrderRequestSchema = z.object({
   currency: z.string().default("INR"),
   trackId: z.string(),
   email: z.string().email(),
+  promoCode: z.string().optional(),
 })
 
 export async function POST(request: NextRequest) {
@@ -18,7 +19,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: result.error.issues.map(e => e.message).join(', ') }, { status: 400 })
     }
 
-    const { currency, trackId, email } = result.data
+    const { currency, trackId, email, promoCode } = result.data
 
     // VALIDATION: Prevent trackId S3 enumeration or garbage purchases
     const allTracks = await getTracks()
@@ -29,10 +30,23 @@ export async function POST(request: NextRequest) {
     }
 
     // PRICING AUTHORITY: Prevent client-side manipulation by deriving price strictly from the backend
-    const numericPrice = parseInt(targetTrack.price.replace(/[^0-9]/g, ''), 10)
+    let numericPrice = parseInt(targetTrack.price.replace(/[^0-9]/g, ''), 10)
     if (isNaN(numericPrice) || numericPrice <= 0) {
       return NextResponse.json({ error: "Invalid track pricing configuration." }, { status: 500 })
     }
+
+    // DYNAMIC PROMO CODE LOGIC: Verifies existence and validity in D1
+    if (promoCode) {
+      const dbPromo = await getPromoCodeByCode(promoCode);
+      if (dbPromo) {
+        if (dbPromo.discount_type === 'fixed') {
+          numericPrice = dbPromo.discount_value;
+        } else if (dbPromo.discount_type === 'percentage') {
+          numericPrice = Math.max(1, Math.round(numericPrice * (1 - dbPromo.discount_value / 100)));
+        }
+      }
+    }
+
     const razorpayAmount = Math.round(numericPrice * 100); // in paise
 
     // Check or create user securely
