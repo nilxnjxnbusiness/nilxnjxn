@@ -1,9 +1,4 @@
-DROP TABLE IF EXISTS audit_logs;
-DROP TABLE IF EXISTS orders;
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS catalogs;
-
-CREATE TABLE catalogs (
+CREATE TABLE IF NOT EXISTS catalogs (
     id TEXT PRIMARY KEY,
     title TEXT NOT NULL,
     item_type TEXT NOT NULL,
@@ -17,14 +12,14 @@ CREATE TABLE catalogs (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id TEXT PRIMARY KEY,
     email TEXT UNIQUE NOT NULL,
     tracking_code TEXT UNIQUE NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE orders (
+CREATE TABLE IF NOT EXISTS orders (
     id TEXT PRIMARY KEY, -- Razorpay order_id
     user_id TEXT NOT NULL,
     amount INTEGER NOT NULL,
@@ -36,7 +31,7 @@ CREATE TABLE orders (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-CREATE TABLE audit_logs (
+CREATE TABLE IF NOT EXISTS audit_logs (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     actor_id TEXT,
     action TEXT NOT NULL,
@@ -45,3 +40,17 @@ CREATE TABLE audit_logs (
     metadata TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+
+CREATE TABLE IF NOT EXISTS promo_codes (
+    code TEXT PRIMARY KEY,
+    discount_type TEXT NOT NULL DEFAULT 'fixed', -- fixed, percentage
+    discount_value INTEGER NOT NULL, -- amount in Rs or percentage
+    is_active INTEGER DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT OR IGNORE INTO promo_codes (code, discount_type, discount_value, is_active) 
+VALUES ('NILA2', 'fixed', 2, 1);
+
+
