@@ -1,18 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getPromoCodes, createPromoCode, deletePromoCode } from "@/lib/db/d1-client";
-
-const ADMIN_PASSWORD = "nilxnjxn-admin-2026";
-
-function authenticate(request: NextRequest) {
-  const authHeader = request.headers.get("Authorization");
-  if (!authHeader || authHeader !== `Bearer ${ADMIN_PASSWORD}`) {
-    return false;
-  }
-  return true;
-}
+import { verifyAdminAuth } from "@/lib/auth";
 
 export async function GET(request: NextRequest) {
-  if (!authenticate(request)) {
+  if (!verifyAdminAuth(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -26,7 +17,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  if (!authenticate(request)) {
+  if (!verifyAdminAuth(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -51,7 +42,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  if (!authenticate(request)) {
+  if (!verifyAdminAuth(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

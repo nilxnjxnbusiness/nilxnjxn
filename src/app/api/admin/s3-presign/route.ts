@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { verifyAdminAuth } from "@/lib/auth";
 
 const s3Client = new S3Client({
   region: "auto",
@@ -13,9 +14,7 @@ const s3Client = new S3Client({
 
 export async function POST(request: NextRequest) {
   try {
-    const adminPassword = "nilxnjxn-admin-2026";
-    const authHeader = request.headers.get("Authorization");
-    if (authHeader !== `Bearer ${adminPassword}`) {
+    if (!verifyAdminAuth(request)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 

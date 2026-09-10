@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { Suspense } from 'react';
 import { SuccessClient } from '@/components/player/SuccessClient';
 
 export const metadata: Metadata = {
@@ -7,5 +8,10 @@ export const metadata: Metadata = {
 };
 
 export default function SuccessPage() {
-  return <SuccessClient />;
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-black" />}>
+      <SuccessClient />
+    </Suspense>
+  );
 }
+

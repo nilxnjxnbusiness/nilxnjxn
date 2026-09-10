@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useLayoutEffect } from 'react';
+import { useRef, useLayoutEffect, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -24,6 +24,21 @@ export function HeroPlayer({ track, onPlay, hasInteracted }: HeroPlayerProps) {
   const { currentTrack, isPlaying, playTrack, togglePlayPause } = useAudioStore();
   const bgRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [preloadMode, setPreloadMode] = useState<'none' | 'metadata' | 'auto'>('none');
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const nav = navigator as unknown as { connection?: { saveData?: boolean; effectiveType?: string } };
+    const isSaveData = nav.connection?.saveData;
+    const isSlow = nav.connection?.effectiveType === '2g' || nav.connection?.effectiveType === 'slow-2g';
+    if (isSaveData || isSlow) {
+      setPreloadMode('none');
+    } else if (window.innerWidth < 768) {
+      setPreloadMode('metadata');
+    } else {
+      setPreloadMode('auto');
+    }
+  }, []);
 
   const isCurrentTrack = currentTrack?.id === track.id;
 
@@ -79,7 +94,7 @@ export function HeroPlayer({ track, onPlay, hasInteracted }: HeroPlayerProps) {
         of the song (usually 5-10s) into memory while the user is reading the landing page. 
         When Wavesurfer (MediaElement backend) asks for the same URL on play, it hits the cache = Instant Play.
       */}
-      <audio preload="auto" src={track.audioUrl} className="hidden" />
+      <audio preload={preloadMode} src={track.audioUrl} className="hidden" />
       
       {/* Background Visuals - Optimized for LCP */}
       <div

@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createCatalogItem } from "@/lib/db/d1-client";
+import { verifyAdminAuth } from "@/lib/auth";
 import crypto from "crypto";
 
 export async function POST(request: NextRequest) {
   try {
-    const adminPassword = "nilxnjxn-admin-2026";
-    const authHeader = request.headers.get("Authorization");
-    if (authHeader !== `Bearer ${adminPassword}`) {
+    if (!verifyAdminAuth(request)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
