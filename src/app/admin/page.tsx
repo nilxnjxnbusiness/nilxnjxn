@@ -16,8 +16,6 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import { PromoCode } from "@/lib/db/d1-client";
 
-const ADMIN_PASSWORD = "nilxnjxn-admin-2026";
-
 export default function AdminDashboard() {
   const [password, setPassword] = useState("");
   const [authed, setAuthed] = useState(false);
@@ -60,13 +58,28 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleAuth = (e: React.FormEvent) => {
+  const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === ADMIN_PASSWORD) {
-      setAuthed(true);
-      toast.success("Identity Verified. Welcome back.");
-    } else {
-      toast.error("Invalid access credentials.");
+    if (!password.trim()) {
+      toast.error("Please enter credentials.");
+      return;
+    }
+    setIsLoading(true);
+    try {
+      const res = await fetch("/api/admin/verify", {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${password}` }
+      });
+      if (res.ok) {
+        setAuthed(true);
+        toast.success("Identity Verified. Welcome back.");
+      } else {
+        toast.error("Invalid access credentials.");
+      }
+    } catch {
+      toast.error("Authentication request failed.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -169,8 +182,12 @@ export default function AdminDashboard() {
               onChange={e => setPassword(e.target.value)}
               className="w-full border-b border-white/10 bg-transparent py-4 text-center font-mono text-sm tracking-[0.5em] text-white focus:border-white/40 focus:outline-none"
             />
-            <button type="submit" className="w-full rounded-full bg-white py-4 text-[10px] font-bold tracking-[0.3em] text-black uppercase transition-all hover:bg-neutral-200">
-              VERIFY ACCESS
+            <button 
+              type="submit" 
+              disabled={isLoading} 
+              className="w-full rounded-full bg-white py-4 text-[10px] font-bold tracking-[0.3em] text-black uppercase transition-all hover:bg-neutral-200 disabled:opacity-50"
+            >
+              {isLoading ? "VERIFYING ACCESS..." : "VERIFY ACCESS"}
             </button>
           </form>
         </motion.div>

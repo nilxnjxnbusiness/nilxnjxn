@@ -131,9 +131,12 @@ export default function AboutPage() {
             </p>
             <div className="flex flex-wrap gap-4">
               <Magnetic strength={0.3}>
-                <button className="font-functional rounded-full bg-white px-8 py-4 text-xs tracking-widest text-black uppercase transition-all hover:scale-105 active:scale-95">
+                <Link
+                  href="/store"
+                  className="font-functional block rounded-full bg-white px-8 py-4 text-xs tracking-widest text-black uppercase transition-all hover:scale-105 active:scale-95"
+                >
                   Support via Store
-                </button>
+                </Link>
               </Magnetic>
               <Magnetic strength={0.2}>
                 <Link

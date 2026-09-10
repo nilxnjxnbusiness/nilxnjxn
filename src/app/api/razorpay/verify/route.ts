@@ -45,20 +45,33 @@ export async function POST(request: NextRequest) {
     }
 
     if (order.status === "paid") {
-      // Idempotency: if already paid, return success 
-      return NextResponse.json({ success: true, message: "Order already processed" })
+      // Idempotency: if already paid, return fresh link for immediate in-app fulfillment
+      let existingLink: string | null = null;
+      if (order.track_id) {
+        try {
+          existingLink = await generateDownloadLink(order.track_id);
+        } catch {}
+      }
+      return NextResponse.json({ 
+        success: true, 
+        message: "Order already processed",
+        downloadLink: existingLink,
+        orderId,
+        trackId: order.track_id,
+      });
     }
 
     // Update order status
     await updateOrderStatus(orderId, "paid", razorpay_payment_id)
 
     // Fulfillment
+    let downloadLink: string | null = null;
     try {
       const user = await getUserByEmail(email)
       if (!user) throw new Error("User not found for fulfillment")
       if (!order.track_id) throw new Error("Order has no track_id")
 
-      const downloadLink = await generateDownloadLink(order.track_id)
+      downloadLink = await generateDownloadLink(order.track_id)
       
       await sendReceiptAndLink(
         email,
@@ -76,6 +89,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       message: "Payment verified and link delivered successfully",
+      downloadLink,
+      orderId,
+      trackId: order.track_id,
     })
   } catch (error) {
     console.error("Payment verification error:", error)

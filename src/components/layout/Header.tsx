@@ -65,7 +65,7 @@ export function Header() {
                 height={48}
                 priority
                 quality={100}
-                className="h-auto w-auto transition-transform duration-500 group-hover:scale-105 md:h-12"
+                className="h-10 w-auto transition-transform duration-500 group-hover:scale-105 md:h-12"
               />
               <span className="font-expressive mt-1 hidden text-[11px] tracking-[0.15em] text-white sm:block md:text-sm">
                 nilxnjxn

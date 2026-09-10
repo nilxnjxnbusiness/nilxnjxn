@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Rock_Salt } from 'next/font/google';
 import { HugeiconsIcon } from '@hugeicons/react';
@@ -32,6 +33,7 @@ function loadRazorpayScript() {
 }
 
 export function CheckoutModal({ onClose, track }: CheckoutModalProps) {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [promoCode, setPromoCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -93,12 +95,33 @@ export function CheckoutModal({ onClose, track }: CheckoutModalProps) {
             })
           });
 
-          const verifyData = await verifyRes.json() as { error?: string };
+          const verifyData = await verifyRes.json() as { 
+            error?: string;
+            downloadLink?: string;
+            orderId?: string;
+            trackId?: string;
+          };
           if (verifyRes.ok) {
-            toast.success('Payment successful! Your download link has been emailed to you.');
+            toast.success('Payment confirmed! Opening your unlocked download...');
+            if (verifyData.downloadLink && typeof window !== 'undefined') {
+              try {
+                sessionStorage.setItem(`download_${data.dbOrderId}`, JSON.stringify({
+                  downloadUrl: verifyData.downloadLink,
+                  trackTitle: track.title,
+                  season: track.season,
+                  price: track.price,
+                  orderId: data.dbOrderId,
+                  email,
+                }));
+              } catch (storageErr) {
+                console.warn('Session storage write failed', storageErr);
+              }
+            }
             onClose();
+            router.push(`/success?orderId=${data.dbOrderId}`);
           } else {
             toast.error(verifyData.error || 'Payment verification failed.');
+            setIsLoading(false);
           }
         },
         prefill: { email },

@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useLayoutEffect, useState, useEffect } from 'react';
+import { useRef, useLayoutEffect, useState } from 'react';
 import { Track } from '@/lib/data';
 import { useAudioStore } from '@/store/audioStore';
 import { PlayIcon, PauseIcon } from '@hugeicons/core-free-icons';
@@ -25,24 +25,6 @@ export function TrackCard({ track, priority = false }: TrackCardProps) {
 
   const isCurrent = currentTrack?.id === track.id;
   const isActive = isCurrent && isPlaying;
-
-  // Intersection Observer for Lazy Preloading
-  useEffect(() => {
-    if (!cardRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) {
-          setShouldPreload(true);
-          observer.disconnect(); // Only need to trigger once
-        }
-      },
-      { rootMargin: '200px' } // Start preloading when 200px from viewport
-    );
-
-    observer.observe(cardRef.current);
-    return () => observer.disconnect();
-  }, []);
 
   useLayoutEffect(() => {
     if (!cardRef.current || !infoRef.current) return;
